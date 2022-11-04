@@ -1,0 +1,80 @@
+@config-split-width: 100;
+@config-split-height: 100;
+
+@Panel-start-x: 1;
+@Panel-width: 21;
+@Panel-start-y: 1;
+@Panel-height: 55;
+
+@Map-start-x: @Panel-width;
+@Map-width: @config-split-width - @Panel-width;
+@Map-start-y: @Panel-start-y;
+@Map-height: @Panel-height;
+
+@SEIR-start-x: @Panel-start-x;
+@SEIR-width: @Panel-width;
+@SEIR-start-y: @Panel-height;
+@SEIR-height: 28;
+
+@Contact-start-x: @Panel-start-x;
+@Contact-width: @SEIR-width;
+@Contact-start-y: @Panel-height + @SEIR-height;
+@Contact-height: @SEIR-height;
+
+@Network-start-x: @SEIR-width;
+@Network-start-y: @SEIR-start-y;
+@Network-width: 40 ;
+@Network-height: @config-split-height - @Map-height;
+
+@Risk-start-x: @SEIR-width + @Network-width;
+@Risk-start-y: @Map-height;
+@Risk-width: @config-split-width - @SEIR-width  - @Network-width;
+@Risk-height: @config-split-height - @Map-height;
+
+#page-container{
+    display: grid;
+    grid-template-columns: repeat(@config-split-width,1vw);
+    grid-template-rows: repeat(@config-split-height,1vh);
+    #Panel{
+        grid-row-start: @Panel-start-y ;
+        grid-row-end: @Panel-height;
+        grid-column-start:@Panel-start-x;
+        grid-column-end: @Panel-width;
+    }
+    #Map{
+        grid-row-start: @Map-start-y;
+        grid-row-end: @Map-height;
+        grid-column-start: @Map-start-x;
+        grid-column-end: @Panel-start-x + @config-split-width;
+        .card-figure
+        {
+            width: 100%;
+        }
+    }
+    #SEIR{
+        grid-row-start: @SEIR-start-y;
+        grid-row-end: @SEIR-start-y + @SEIR-height;
+        grid-column-start: @SEIR-start-x;
+        grid-column-end: @SEIR-width;
+    }
+    #Contact{
+        grid-row-start: @Contact-start-y;
+        grid-row-end: @Contact-height + @Contact-start-y;
+        grid-column-start: @Contact-start-x;
+        grid-column-end: @Contact-width;
+    }
+    #Network{
+        grid-row-start: @Network-start-y;
+        grid-column-start: @Network-start-x;
+        grid-row-end: @Contact-height + @Contact-start-y;
+        grid-column-end: @Network-start-x + @Network-width;
+    }
+    #Risk{
+        grid-row-start: @Risk-start-y;
+        grid-column-start: @Risk-start-x;
+        grid-row-end: @Contact-height + @Contact-start-y;
+        grid-column-end: @Panel-start-x + @config-split-width;
+        // grid-column-end: @Risk-start-x + @Risk-width;
+        // grid-row-end: @config-split-height;
+    }
+}

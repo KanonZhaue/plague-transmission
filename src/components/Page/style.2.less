@@ -1,0 +1,36 @@
+@page-height:98.2vh;
+@Panel-height:63vh;
+@offset-height:0.65vh;
+
+#page-container{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    .flex-item{
+        display: flex;
+        flex-direction: column;
+        margin: 3px 1px;
+    }
+}
+
+// #Map{
+//     height: @page-height;
+// }
+
+// #Network{
+//     height: @page-height;
+// }
+
+#Panel,#Map,#Network{
+    height:@Panel-height;
+    margin-bottom: 3px;
+}
+
+.hover-stroke:hover
+{
+    stroke: #111;
+    stroke-width: 2px;
+}
+// #Ana{
+//     height: @page-height - @Panel-height - @offset-height;
+// }

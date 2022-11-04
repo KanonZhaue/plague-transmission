@@ -1,0 +1,62 @@
+#page-container {
+  display: flex;
+  flex-direction: row;
+  height: 73.5vh;
+}
+
+#page-container .flex-item {
+  display: flex;
+  flex-direction: column;
+  margin: 1px 1px;
+}
+
+#Panel {
+  height: 47vh;
+}
+
+/* #Map, */
+#Network {
+  height: 62.5vh;
+  margin-bottom: 3px;
+}
+
+#Map {
+  height: 62.5vh;
+  margin-bottom: 0px;
+}
+
+#netbox,
+#Sunburst {
+  display: flex;
+  margin-top: 3px;
+}
+
+
+#storyline {
+  height: 100%;
+}
+
+#Parallel {
+  margin-top: -84px;
+  margin-left: 2px;
+  height: 280px;
+  width: 1190px;
+}
+
+.hover-stroke:hover {
+  stroke: #111;
+  stroke-width: 2px;
+}
+
+#Tooltip {
+  width: 250px;
+  height: 300px;
+  margin: auto;
+  top: auto;
+  background-color: aliceblue;
+  position: relative;
+  top: -80vh;
+  display: none;
+
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}

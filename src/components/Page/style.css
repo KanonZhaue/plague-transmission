@@ -1,0 +1,51 @@
+#page-container {
+  display: grid;
+  grid-template-columns: repeat(100, 1vw);
+  grid-template-rows: repeat(100, 1vh);
+}
+
+#page-container #Panel {
+  grid-row-start: 1;
+  grid-row-end: 55;
+  grid-column-start: 1;
+  grid-column-end: 21;
+}
+
+#page-container #Map {
+  grid-row-start: 1;
+  grid-row-end: 55;
+  grid-column-start: 21;
+  grid-column-end: 101;
+}
+
+#page-container #Map .card-figure {
+  width: 100%;
+}
+
+#page-container #SEIR {
+  grid-row-start: 55;
+  grid-row-end: 83;
+  grid-column-start: 1;
+  grid-column-end: 21;
+}
+
+#page-container #Contact {
+  grid-row-start: 83;
+  grid-row-end: 111;
+  grid-column-start: 1;
+  grid-column-end: 21;
+}
+
+#page-container #Network {
+  grid-row-start: 55;
+  grid-column-start: 21;
+  grid-row-end: 111;
+  grid-column-end: 61;
+}
+
+#page-container #Risk {
+  grid-row-start: 55;
+  grid-column-start: 61;
+  grid-row-end: 111;
+  grid-column-end: 101;
+}

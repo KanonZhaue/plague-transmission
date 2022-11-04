@@ -1,0 +1,67 @@
+#page-container {
+    display: flex;
+    flex-direction: row;
+    height: 60vh;
+}
+
+#first_row {
+    flex: 1;
+    /* width: 489px; */
+    margin: 3px 1px;
+}
+
+#second_row {
+    flex: 2;
+    /* width: 895px; */
+    margin: 3px 1px;
+}
+
+#third_row {
+    flex: 1;
+    /* width: 530px; */
+    margin: 3px 1px;
+}
+
+#Panel {
+    height: 56vh;
+}
+
+#Map {
+    height: 56vh;
+    margin-bottom: 0px;
+}
+
+#SEIR {
+    display: flex;
+    margin-top: 1px;
+}
+
+#other {
+    display: flex;
+    flex-direction: row;
+}
+
+#river {
+    display: flex;
+    margin-top: 2px;
+}
+
+#net {
+    display: flex;
+    margin-top: -30px;
+}
+
+#storyline {
+    display: flex;
+    margin-top: 3px;
+}
+
+#Trace {
+    /* height: vh; */
+    margin-bottom: 0px;
+}
+
+.hover-stroke:hover {
+    stroke: #111;
+    stroke-width: 2px;
+}

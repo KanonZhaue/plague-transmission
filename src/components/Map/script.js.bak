@@ -1,0 +1,46 @@
+/* eslint-disable */
+import { Scene } from '../../js/Scene'
+import { onMounted, inject, watch, } from 'vue'
+import { injects } from '../../js/injects'
+import { dt2t } from '../../js/kit'
+var d3=require('d3')
+
+export default ()=>
+{
+    var scene=new Scene('#map-svg')
+    var distanceLine=inject('distanceLine')
+    inject('scene').value=scene
+    scene.loadDefault()
+    var {currentTick,currentDay,ticks,N,}=injects()
+    scene.generateRoles(N.value)
+    function updateMap(scene){
+        console.log('distance link:',distanceLine.value)
+        scene.drawByTick(dt2t(currentDay.value,currentTick.value),distanceLine.value)
+        // if(distanceLine.value)
+        console.log('re -scene over!')
+    }
+    onMounted(()=>{
+        // 初始化高度
+        var title_height=document.querySelector('#Map .card-title').offsetHeight
+        var map_svg_height=document.querySelector('#Map').offsetHeight-title_height
+        var svg=d3.select('#map-svg')
+        svg.attr('height',map_svg_height)
+        scene.init()
+        scene.updateStateOfRoles()
+        updateMap(scene)
+    })
+    watch(currentTick,()=>{updateMap(scene)})
+    watch(distanceLine,()=>{updateMap(scene)})
+    watch(currentDay,()=>{updateMap(scene)})
+    watch(inject('iniChanged'),()=>{
+        scene.updateStateOfRoles()
+        updateMap(scene)
+    },{immediate:false})
+    // watch(inject('SEIR_data'),()=>{
+    //     // scene.updateStateOfRoles()
+    //     // updateMap(scene)
+    //     console.log('updated!')
+    // })
+    return {
+    }
+}

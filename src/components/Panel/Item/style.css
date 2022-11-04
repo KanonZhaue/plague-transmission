@@ -1,0 +1,27 @@
+#Panel-body {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1px;
+}
+
+#Panel-body .Panel-item {
+  width: 100%;
+  margin: -2px 1px 8px -20px;
+  display: flex;
+  flex-direction: row;
+}
+
+#Panel-body .Panel-item p {
+
+  flex: 1;
+  margin-top: -4px;
+  margin-left: 30px;
+}
+
+#Panel-body .Panel-item div {
+  flex: 3.5;
+}
+
+#Panel-body .Panel-item div input {
+  width: 100%;
+}

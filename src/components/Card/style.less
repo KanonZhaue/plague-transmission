@@ -1,0 +1,35 @@
+@border-padding:0px;
+@border-radius:0px;
+@title-padding:1.7px;
+@theme-color:rgb(53, 53, 53);
+@border-width:2px;
+@figure-margin-top:0px;
+
+.card-border{
+    border:@border-width solid @theme-color;
+    border-radius: @border-radius;
+    margin: 1px 1px;
+    padding-left: @border-padding;
+    padding-top: -@border-width+ @border-padding+@title-padding;
+    padding-bottom: @title-padding;
+    .card-title{
+        display: inline;
+        background-color: @theme-color;
+        padding: @title-padding;
+        p{
+            color: #fff;
+            font-size: 14px;
+            display: inline;
+        }
+    }
+    .card-figure{
+        margin-top: @figure-margin-top;
+    }
+    .card-icon{
+        display: inline;
+        .icon{
+            float: right;
+            display: inline;
+        }
+    }
+}

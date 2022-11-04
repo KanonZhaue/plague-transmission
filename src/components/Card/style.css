@@ -1,0 +1,28 @@
+.card-border {
+  border: 2px solid #353535;
+  border-radius: 0px;
+  margin: 1px 1px;
+  padding-left: 0px;
+  padding-top: -0.3px;
+  padding-bottom: 1.7px;
+}
+.card-border .card-title {
+  display: inline;
+  background-color: #353535;
+  padding: 1.7px;
+}
+.card-border .card-title p {
+  color: #fff;
+  font-size: 14px;
+  display: inline;
+}
+.card-border .card-figure {
+  margin-top: 0px;
+}
+.card-border .card-icon {
+  display: inline;
+}
+.card-border .card-icon .icon {
+  float: right;
+  display: inline;
+}
