@@ -2,36 +2,35 @@ import { injects } from "../../js/injects"
 
 class newScene {
     constructor(name, size, dist, popul, avgtime) {
-        this.name = name
-        this.size = { x: size.x, y: size.y }
-        this.distance = dist
-        this.popularity = popul
-        this.avgTime = avgtime
+        this.name = name;
+        this.size = { x: size.x, y: size.y };
+        this.distance = dist;
+        this.popularity = popul;
+        this.avgTime = avgtime;
     }
 }
 
 let scenes = []
 
-export default function setup () {
-    var ini = injects()
+export default function setup() {
+    var ini = injects();
     var Name = null,
         size = { x: 0, y: 0 },
         dist = 0,
         popul = 0,
-        avgtime = 0
+        avgtime = 0;
 
     return {
-        DialogYes () {
-            document.getElementById("Tooltip").style.display = "none"
-            var scene = new newScene(Name, size, dist, popul, avgtime)
-            console.log(scene)
+        DialogYes() {
+            document.getElementById("Tooltip").style.display = "none";
+            var scene = new newScene(Name, size, dist, popul, avgtime);
             // scenes.push(scene)
             ini["addScene"].value += 1
             ini["newScene"].value = scene
             // console.log(ini)
         },
-        DialogNO () {
-            document.getElementById("Tooltip").style.display = "none"
+        DialogNO() {
+            document.getElementById("Tooltip").style.display = "none";
         },
         options: [
             {
@@ -64,23 +63,23 @@ export default function setup () {
             }
         ],
 
-        inputName (key) {
+        inputName(key) {
             Name = key
             // console.log(Name)
         },
-        Size_x (key) {
-            size.x = key
+        Size_x(key) {
+            size.x = key;
         },
-        Size_y (key) {
-            size.y = key
+        Size_y(key) {
+            size.y = key;
         },
-        Dist (key) {
-            dist = key
+        Dist(key) {
+            dist = key;
         },
-        Popularity (key) {
-            popul = key
+        Popularity(key) {
+            popul = key;
         },
-        Avgtime (key) {
+        Avgtime(key) {
             avgtime = key
         }
     }

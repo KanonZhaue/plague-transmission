@@ -1,13 +1,12 @@
 /* eslint-disable */
 
-import { color } from 'd3'
 import { onMounted, inject, watch } from 'vue'
 import { injects } from '../../js/injects'
 import { dt2t, last, t2dt } from '../../js/kit'
 
-var d3 = require('d3')
+var d3 = require('d3');
 
-function setup () {
+function setup() {
     var ini = injects()
     watch(ini.force_role, () => display(ini), { immediate: false })
     watch(ini.stateupdated, () => display(ini), { immediate: false })
@@ -23,10 +22,8 @@ function setup () {
 // const session_size = 20; // 20
 export { setup }
 var scene = []
-function display (_ini) {
-    console.log(_ini)
-
-    let ini = getIni(_ini)
+function display(_ini) {
+    let ini = getIni(_ini);
     let { nodes, _rec } = ini.scene.storyline((ini.ticks - 1) * ini.days)
     console.log(ini)
 
@@ -54,14 +51,12 @@ function display (_ini) {
         },
         loc_num_org = {}
 
-    console.log(scene)
+
     for (let i = 0; i <= ini.addScene; i++) {
         tmp_loc[ini.scenes[i]] = i
         loc_num_org[ini.scenes[i]] = []
         scene.push(ini.scenes[i])
     }
-    console.log(scene)
-    console.log(ini.addScene)
     // console.log(tmp_loc)
 
     var now_id = force_role.id
@@ -70,7 +65,6 @@ function display (_ini) {
     // console.log(pattern)
     if (pattern == "transmission") {
         // 传播路径的数据
-        console.log(nodes)
         let tmp = {}
         for (let i = 0; i < nodes[now_id].sons.length; i++) {
             tmp_char[nodes[now_id].sons[i]] = nodes[nodes[now_id].sons[i]]
@@ -93,7 +87,6 @@ function display (_ini) {
     } else {
         //接触人员的数据
         let raw = ini.scene.traceData(ini.force_role, false)
-        console.log(raw)
         console.log(nodes[ini.force_role], ini.force_role)
         if (raw == null) return false
         // let data = []
@@ -154,7 +147,7 @@ function display (_ini) {
     // console.log(tmp_char, loc_num, sessions)
 
 
-    let characters = [], locations = []
+    let characters = [], locations = [];
     for (let k in tmp_char)
         characters.push({
             name: k,
@@ -174,7 +167,7 @@ function display (_ini) {
         tmp_text.push(k)
     }
 
-    var _isdraw = 1
+    var _isdraw = 1;
     if (tmp_text.length == 1 && tmp_text[0] == '0')
         _isdraw = 0//只有一个人感染，则不画storyline
 
@@ -184,8 +177,8 @@ function display (_ini) {
 
 
 
-function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
-    console.log(data, loc_num, force_role, ticks, tmp_char, _isdraw)
+function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw) {
+
     const svg = d3.select("#parallel-svg").html("")
 
     const conf = {
@@ -199,7 +192,7 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
         }
     }
 
-    let { locations, sessions, characters } = data
+    let { locations, sessions, characters } = data;
     // console.assert(locations instanceof Array && locations.length > 0, "variable `locations` is void. ")
     // console.assert(characters instanceof Array && characters.length > 0, "variable `characters` is void. ")
     // for (let i = 0; i < characters.length; i++) {
@@ -213,7 +206,7 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
     //         break
     //     }
     // }
-    const session_size = sessions[characters[0].id].length
+    const session_size = sessions[characters[0].id].length;
     // console.log("session size", session_size)
 
 
@@ -230,7 +223,6 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
             .paddingInner(0.5)
             .paddingOuter(0),
     }
-
 
 
 
@@ -269,7 +261,7 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
         .range([conf.padding.left, conf.width - conf.padding.right - conf.padding.left])
         .paddingInner(0.5)
         .paddingOuter(0)
-    var xAxis1 = d3.axisBottom().scale(time_ticks)
+    var xAxis1 = d3.axisBottom().scale(time_ticks);
 
 
 
@@ -471,7 +463,6 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
     // }
 
     // var scene = ["Section 1", "Section 2", "Section 3", "Section 4", "Section 5", "Section 6"]
-    console.log(scene)
     var tuli = svg.append("g")
         .selectAll("g")
         .data(scene)
@@ -480,7 +471,7 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
     tuli.append("rect")
         .attr("x", (d, i) => {
 
-            return 0
+            return 0;
         })
         .attr("y", (d, i) => {
             return scale.scenes(i) + 5
@@ -488,13 +479,13 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
         .attr("width", (d, i) => i == 6 ? 70 : 45)
         .attr("height", h - 10)
         .attr("fill", (d, i) => {
-            return colors[Object.keys(colors)[i]]
+            // return colors[d]
         })
     tuli.append("text")
         .text((d) => d)
         .attr("x", (d, i) => {
 
-            return 0
+            return 0;
         })
         .attr("y", (d, i) => {
             return scale.scenes(i) + 5 + 15
@@ -519,7 +510,7 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
                 return d[0]
             }))
             .y((d) => d[1])
-            .curve(d3.curveCardinal)
+            .curve(d3.curveCardinal);
 
         let link = d3.linkHorizontal()
             .source((d) => {
@@ -1063,11 +1054,11 @@ function parallel_draw (data, loc_num, force_role, ticks, tmp_char, _isdraw) {
         //     .attr("stroke-width", '2')
 
         svg.append('g')
-            .call(xAxis1)
+            .call(xAxis1);
     }
 }
 
-function getIni (ini) {
+function getIni(ini) {
     var _ = {}
     for (let k in ini) {
         _[k] = ini[k].value
