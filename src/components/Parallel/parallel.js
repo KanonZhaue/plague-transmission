@@ -1,6 +1,7 @@
 /* eslint-disable */
 
-import { onMounted, inject, watch } from 'vue'
+import { objectToString } from '@vue/shared';
+import { onMounted, inject, watch, resolveComponent } from 'vue'
 import { injects } from '../../js/injects'
 import { dt2t, last, t2dt } from '../../js/kit'
 
@@ -23,10 +24,11 @@ function setup() {
 export { setup }
 var scene = []
 function display(_ini) {
+    scene = []
     let ini = getIni(_ini);
     let { nodes, _rec } = ini.scene.storyline((ini.ticks - 1) * ini.days)
-    console.log(ini)
-
+    console.log(nodes,_rec)
+console.log(ini);
 
     // console.log(nodes, _rec)
     //change
@@ -51,14 +53,16 @@ function display(_ini) {
         },
         loc_num_org = {}
 
-
+    console.log(ini.scenes)
+    console.log(loc_num_org)
     for (let i = 0; i <= ini.addScene; i++) {
         tmp_loc[ini.scenes[i]] = i
         loc_num_org[ini.scenes[i]] = []
         scene.push(ini.scenes[i])
     }
-    // console.log(tmp_loc)
-
+    console.log(loc_num_org)
+    console.log(tmp_loc)
+    console.log(scene)
     var now_id = force_role.id
     var ticks = []
     var pattern = ini.storyline_pattern
@@ -114,11 +118,15 @@ function display(_ini) {
 
 
 
-    /****************
+    /***************    *
      **  SESSIONS   *
      *****************/
 
     let sessions = {}, loc_num = {}
+    console.log(ticks)
+    console.log(ini.scenes.length)
+
+    // zjaRectDatas = []
     for (let k in tmp_char) {
         let role = tmp_char[k].role
         // console.log(role)
@@ -126,25 +134,43 @@ function display(_ini) {
         // for (let i = t; i < ed_t && i < ((t + session_size) < ed_t ? (t + session_size) : ed_t); ++i) {
         for (let j = 0; j < ticks.length; j++) {
             let i = ticks[j]
-            if (loc_num[i] == undefined) {
-                loc_num[i] = loc_num_org
-            }
             let { scene } = role.coordination[i]
-            // console.log(scene, role.coordination, i)
-            let loc = scene.name
+            if (loc_num[i] == undefined) {
+                loc_num[i] = {}
+                for(let zjai=0;zjai<ini.scenes.length;zjai++){
+                    console.log(Object.values(ini.scenes));
+                    loc_num[i][Object.values(ini.scenes)[zjai]] = []
+                }
+                
+            }
+            console.log(loc_num)
 
+            
+            //scene就是场景，role.coordination就是人物的场景/坐标
+            console.log(scene, role.coordination, i)
+            let loc = scene.name
+            //loc是所选场景的id
             if (tmp_loc[loc] === undefined) tmp_loc[loc] = loc
             // console.log(role.state[i], role.state[ticks[j - 1]])
-            if ((j != 0 && role.state[i].state == 'exposed' && role.state[ticks[j - 1]].state == 'susceptible'))  //|| (j == 0 && role.state[i].state != 'susceptible')
+            if ((j != 0 && role.state[i].state == 'exposed' && role.state[ticks[j - 1]].state == 'susceptible')) {//j!=0表示不是第一时刻，tick[j]时为exposed,tick[j-1]时为susceptible认为在这一时刻被感染
+                console.log(role)
                 loc_num[i][loc].push(tmp_char[k].id)
+                // tempRectData = {}
+                // tempRectData['startTick'] = role.state[role.tick].infected
+                // tempRectData['scene'] = role.state[role.tick].scene
+                // tempRectData['from'] = role.state[role.tick].from
+                // tempRectData['to'] = role.id
+                // zjaRectDatas.push(tempRectData)
+            }  //|| (j == 0 && role.state[i].state != 'susceptible')
 
+            console.log(loc_num)
             session.push({
                 state: role.state[i].state,
                 loc: tmp_loc[loc]
             })
         }
     }
-    // console.log(tmp_char, loc_num, sessions)
+    console.log(tmp_char, loc_num, sessions)
 
 
     let characters = [], locations = [];
@@ -172,13 +198,14 @@ function display(_ini) {
         _isdraw = 0//只有一个人感染，则不画storyline
 
 
-    parallel_draw(story_data, loc_num, force_role, ticks, tmp_char, _isdraw)
+    parallel_draw(story_data, loc_num, force_role, ticks, tmp_char, _isdraw, scene)
 }
 
 
 
-function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw) {
-
+function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scene) {
+    console.log(scene)
+    console.log(loc_num)
     const svg = d3.select("#parallel-svg").html("")
 
     const conf = {
@@ -270,197 +297,208 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw) {
     //绘制场景
     var h = s_i.length == 1 ? (conf.height - conf.padding.bottom) : (scale.scenes(1) - scale.scenes(0))
     var op = 0.4
-    // for (let j = 0; j < ticks.length; j++) {
-    //     let i = ticks[j]
-    //     // console.log(loc_num[i])
-    //     var h = s_i.length == 1 ? (conf.height - conf.padding.bottom) : (scale.scenes(1) - scale.scenes(0))
-    //     var w = (scale.ticks(1) - scale.ticks(0)) / 2
-    //     // var lt = scale.scenes(1)
+    console.log(ticks)
+    console.log(loc_num)
+    console.log(scene)
+    console.log(tmp_char)
+    for (let j = 0; j < ticks.length; j++) {
+        let i = ticks[j]
+        var h = s_i.length == 1 ? (conf.height - conf.padding.bottom) : (scale.scenes(1) - scale.scenes(0))
+        var w = (scale.ticks(1) - scale.ticks(0)) / 2
+        // var lt = scale.scenes(1)
+        for (let zji = 0; zji < scene.length; zji++) {
+            console.log(loc_num[i][scene[zji]])
+            if (loc_num[i][scene[zji]].length > 0) {
+                svg.append('rect')
+                    .attr("x", conf.padding.left + w * 2 * (j))
+                    .attr("y", scale.scenes(zji))
+                    .attr("width", w)
+                    .attr("height", h)
+                    .attr('stroke-width', 0.2)
+                    .attr("stroke", "black")
+                    .attr('fill', colors[Object.keys(colors)[zji]])
+                    .attr("opacity", op)
+                    .append("title")
+                    .text(() => {
+                        console.log(loc_num);
+                        console.log(tmp_char);
+                        var text_t = ""
+                        for (let k = 0; k < loc_num[i][scene[zji]].length; k++) {
+                            var id = loc_num[i][scene[zji]][k]
+                            var from = tmp_char[id].from
 
-    //     if (loc_num[i]["Section 1"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(0))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["Section 1"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["Section 1"].length; k++) {
-    //                     var id = loc_num[i]["Section 1"][k]
-    //                     var from = tmp_char[id].from
+                            text_t += "from " + from + " to " + id + "\n"
 
-    //                     text_t += "from " + from + " to " + id + "\n"
+                        }
 
-    //                 }
+                        return text_t
 
-    //                 return text_t
-
-    //             })
-    //     }
-    //     if (loc_num[i]["Section 2"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(1))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["Section 2"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["Section 2"].length; k++) {
-    //                     var id = loc_num[i]["Section 2"][k]
-    //                     var from = tmp_char[id].from
-
-    //                     text_t += "from " + from + " to " + id + "\n"
-
-    //                 }
-
-    //                 return text_t
-
-    //             }
-    //             )
-    //     }
-    //     if (loc_num[i]["Section 3"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(2))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["Section 3"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["Section 3"].length; k++) {
-    //                     var id = loc_num[i]["Section 3"][k]
-    //                     var from = tmp_char[id].from
-
-    //                     text_t += "from " + from + " to " + id + "\n"
-
-    //                 }
-
-    //                 return text_t
-
-    //             }
-    //             )
-    //     }
-    //     if (loc_num[i]["Section 4"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(3))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["Section 4"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["Section 4"].length; k++) {
-    //                     var id = loc_num[i]["Section 4"][k]
-    //                     var from = tmp_char[id].from
-
-    //                     text_t += "from " + from + " to " + id + "\n"
-
-    //                 }
-
-    //                 return text_t
-
-    //             }
-    //             )
-    //     }
-    //     if (loc_num[i]["Section 5"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(4))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["Section 5"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["Section 5"].length; k++) {
-    //                     var id = loc_num[i]["Section 5"][k]
-    //                     var from = tmp_char[id].from
-
-    //                     text_t += "from " + from + " to " + id + "\n"
-
-    //                 }
-
-    //                 return text_t
-
-    //             }
-    //             )
-    //     }
-    //     if (loc_num[i]["Section 6"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(5))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["Section 6"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["Section 6"].length; k++) {
-    //                     var id = loc_num[i]["Section 6"][k]
-    //                     var from = tmp_char[id].from
-
-    //                     text_t += "from " + from + " to " + id + "\n"
-
-    //                 }
-
-    //                 return text_t
-
-    //             }
-    //             )
-    //     }
-    //     if (loc_num[i]["isolated area"].length > 0) {
-    //         svg.append('rect')
-    //             .attr("x", conf.padding.left + w * 2 * (j))
-    //             .attr("y", scale.scenes(6))
-    //             .attr("width", w)
-    //             .attr("height", h)
-    //             .attr('stroke-width', 0.2)
-    //             .attr("stroke", "black")
-    //             .attr('fill', colors["isolated area"])
-    //             .attr("opacity", op)
-    //             .append("title")
-    //             .text(() => {
-    //                 var text_t = ""
-    //                 for (let k = 0; k < loc_num[i]["isolated area"].length; k++) {
-    //                     var id = loc_num[i]["isolated area"][k]
-    //                     var from = tmp_char[id].from
-
-    //                     text_t += "from " + from + " to " + id + "\n"
-
-    //                 }
-
-    //                 return text_t
-
-    //             }
-    //             )
+                    })
+            }
 
 
-    //     }
-    // }
+
+        }
+
+        // if (loc_num[i]["Section 2"].length > 0) {
+        //     svg.append('rect')
+        //         .attr("x", conf.padding.left + w * 2 * (j))
+        //         .attr("y", scale.scenes(1))
+        //         .attr("width", w)
+        //         .attr("height", h)
+        //         .attr('stroke-width', 0.2)
+        //         .attr("stroke", "black")
+        //         .attr('fill', colors["Section 2"])
+        //         .attr("opacity", op)
+        //         .append("title")
+        //         .text(() => {
+        //             var text_t = ""
+        //             for (let k = 0; k < loc_num[i]["Section 2"].length; k++) {
+        //                 var id = loc_num[i]["Section 2"][k]
+        //                 var from = tmp_char[id].from
+
+        //                 text_t += "from " + from + " to " + id + "\n"
+
+        //             }
+
+        //             return text_t
+
+        //         }
+        //         )
+        // }
+        // if (loc_num[i]["Section 3"].length > 0) {
+        //     svg.append('rect')
+        //         .attr("x", conf.padding.left + w * 2 * (j))
+        //         .attr("y", scale.scenes(2))
+        //         .attr("width", w)
+        //         .attr("height", h)
+        //         .attr('stroke-width', 0.2)
+        //         .attr("stroke", "black")
+        //         .attr('fill', colors["Section 3"])
+        //         .attr("opacity", op)
+        //         .append("title")
+        //         .text(() => {
+        //             var text_t = ""
+        //             for (let k = 0; k < loc_num[i]["Section 3"].length; k++) {
+        //                 var id = loc_num[i]["Section 3"][k]
+        //                 var from = tmp_char[id].from
+
+        //                 text_t += "from " + from + " to " + id + "\n"
+
+        //             }
+
+        //             return text_t
+
+        //         }
+        //         )
+        // }
+        // if (loc_num[i]["Section 4"].length > 0) {
+        //     svg.append('rect')
+        //         .attr("x", conf.padding.left + w * 2 * (j))
+        //         .attr("y", scale.scenes(3))
+        //         .attr("width", w)
+        //         .attr("height", h)
+        //         .attr('stroke-width', 0.2)
+        //         .attr("stroke", "black")
+        //         .attr('fill', colors["Section 4"])
+        //         .attr("opacity", op)
+        //         .append("title")
+        //         .text(() => {
+        //             var text_t = ""
+        //             for (let k = 0; k < loc_num[i]["Section 4"].length; k++) {
+        //                 var id = loc_num[i]["Section 4"][k]
+        //                 var from = tmp_char[id].from
+
+        //                 text_t += "from " + from + " to " + id + "\n"
+
+        //             }
+
+        //             return text_t
+
+        //         }
+        //         )
+        // }
+        // if (loc_num[i]["Section 5"].length > 0) {
+        //     svg.append('rect')
+        //         .attr("x", conf.padding.left + w * 2 * (j))
+        //         .attr("y", scale.scenes(4))
+        //         .attr("width", w)
+        //         .attr("height", h)
+        //         .attr('stroke-width', 0.2)
+        //         .attr("stroke", "black")
+        //         .attr('fill', colors["Section 5"])
+        //         .attr("opacity", op)
+        //         .append("title")
+        //         .text(() => {
+        //             var text_t = ""
+        //             for (let k = 0; k < loc_num[i]["Section 5"].length; k++) {
+        //                 var id = loc_num[i]["Section 5"][k]
+        //                 var from = tmp_char[id].from
+
+        //                 text_t += "from " + from + " to " + id + "\n"
+
+        //             }
+
+        //             return text_t
+
+        //         }
+        //         )
+        // }
+        // if (loc_num[i]["Section 6"].length > 0) {
+        //     svg.append('rect')
+        //         .attr("x", conf.padding.left + w * 2 * (j))
+        //         .attr("y", scale.scenes(5))
+        //         .attr("width", w)
+        //         .attr("height", h)
+        //         .attr('stroke-width', 0.2)
+        //         .attr("stroke", "black")
+        //         .attr('fill', colors["Section 6"])
+        //         .attr("opacity", op)
+        //         .append("title")
+        //         .text(() => {
+        //             var text_t = ""
+        //             for (let k = 0; k < loc_num[i]["Section 6"].length; k++) {
+        //                 var id = loc_num[i]["Section 6"][k]
+        //                 var from = tmp_char[id].from
+
+        //                 text_t += "from " + from + " to " + id + "\n"
+
+        //             }
+
+        //             return text_t
+
+        //         }
+        //         )
+        // }
+        // if (loc_num[i]["isolated area"].length > 0) {
+        //     svg.append('rect')
+        //         .attr("x", conf.padding.left + w * 2 * (j))
+        //         .attr("y", scale.scenes(6))
+        //         .attr("width", w)
+        //         .attr("height", h)
+        //         .attr('stroke-width', 0.2)
+        //         .attr("stroke", "black")
+        //         .attr('fill', colors["isolated area"])
+        //         .attr("opacity", op)
+        //         .append("title")
+        //         .text(() => {
+        //             var text_t = ""
+        //             for (let k = 0; k < loc_num[i]["isolated area"].length; k++) {
+        //                 var id = loc_num[i]["isolated area"][k]
+        //                 var from = tmp_char[id].from
+
+        //                 text_t += "from " + from + " to " + id + "\n"
+
+        //             }
+
+        //             return text_t
+
+        //         }
+        //         )
+
+
+        // }
+    }
 
     // var scene = ["Section 1", "Section 2", "Section 3", "Section 4", "Section 5", "Section 6"]
     var tuli = svg.append("g")
@@ -479,7 +517,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw) {
         .attr("width", (d, i) => i == 6 ? 70 : 45)
         .attr("height", h - 10)
         .attr("fill", (d, i) => {
-            // return colors[d]
+            return colors[Object.keys(colors)[i]]
         })
     tuli.append("text")
         .text((d) => d)
