@@ -4,10 +4,12 @@ import { injects } from "../../js/injects"
 import conf from "../../conf/cls8"
 import { dt2t } from '../../js/kit'
 
+
 var ini
 export default function setup() {
     ini = injects()
     let node = conf.nodes
+    console.log("node",node)
     let nodes = [{ value: 'default', label: 'default' }]
     for (let i = 0; i < node.length; i++) {
         nodes.push({
@@ -17,6 +19,7 @@ export default function setup() {
     }
     if (ini.seleted_scene.value == null)
         ini.seleted_scene.value = node[0].name
+    
     watch(inject('changeConfig'), () => update_args(ini))
     watch(inject('seleted_scene'), () => update_panel(ini))
     watch(inject('med'), () => {
@@ -40,8 +43,10 @@ export default function setup() {
         ini.radar_args_changed.value['beta'] = 1
     })
     watch(inject("addScene"), () => {
-
-        // console.log(1)
+        console.log('node1111',nodes)
+        node = conf.nodes
+        update_panel(ini)
+    
     })
     return {
         chooseScene,
@@ -96,6 +101,7 @@ export function update_panel(ini) {
         "close_distance",
     ]
     let scene = ini.seleted_scene.value
+    console.log("scene111",scene)
     for (let i = 0; i < keys.length; i++) {
         let v = ini.args.value[scene][keys[i]]
         ini[keys[i]].value = v == undefined ? ini.args.value.default[keys[i]] : v

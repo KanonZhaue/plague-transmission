@@ -113,6 +113,7 @@
         @click="chooseScene(node.name)"
         size="tiny"
         style="margin: 2px 2px; color: #222"
+        v-if="reDraw"
       >
         {{ node.name }}
       </n-button>
@@ -196,11 +197,29 @@
 import setup from "./script";
 import Item from "./Item";
 import Radar from "../Radar";
-
+import addScene from '../addScene'
 
 export default {
-  components: { Item, Radar },
+  components: { Item, Radar,addScene },
   setup,
+  
+  data(){return{
+    reDraw:true
+  }},
+  methods:{
+    reDrawSceneRects(){
+      this.reDraw = false
+
+      this.$nextTick(function(){
+        this.reDraw = true
+      })
+    },
+
+  },
+    mounted(){
+      window.reDrawSceneRects = this.reDrawSceneRects
+    }
+  
 };
 </script>
 

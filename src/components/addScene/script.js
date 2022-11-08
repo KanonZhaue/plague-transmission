@@ -1,4 +1,5 @@
 import { injects } from "../../js/injects"
+import conf from "../../conf/cls8"
 
 class newScene {
     constructor(name, size, dist, popul, avgtime) {
@@ -28,6 +29,9 @@ export default function setup() {
             ini["addScene"].value += 1
             ini["newScene"].value = scene
             // console.log(ini)
+            let node = conf.nodes
+            console.log('node1',node)
+            window.reDrawSceneRects()
         },
         DialogNO() {
             document.getElementById("Tooltip").style.display = "none";
@@ -84,7 +88,9 @@ export default function setup() {
         }
     }
 }
-
+// function getReDraw1(that){
+//     that.reDrawSceneRects()
+// }
 // // import ini from '../../conf/ini'
 // import conf, { link_realName2alias } from "../../conf/cls8"
 // import { injects } from "../../js/injects"
