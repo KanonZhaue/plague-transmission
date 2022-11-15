@@ -394,8 +394,9 @@ export class Scene {
 
     //问题：1加隔离区后场景大小记得改
     //问题：2新区域
-
+    
     DrawRect = () => {
+        var BoxDesigner = [[1,1],[2,1],[2,2],[2,2],[3,2],[3,2],[3,3],[3,3],[3,3],[4,3],[4,3],[4,3]]
         console.log(this)
         var svg = d3.select(this.selector).html('')
         this.svg = svg
@@ -404,7 +405,9 @@ export class Scene {
         svgConf.height = svg.node().clientHeight
         svgConf.width = svg.node().clientWidth
         var { column } = this.layout
-        var row = Math.ceil(this.nodes.length / column)
+        // var column
+        // var row = Math.ceil(this.nodes.length / column)
+var [column,row] = BoxDesigner[ini.scenes.length-1]
         let box = svg.append('g')
             .attr('transform', `translate(${config.map.boxes.padding.left},${config.map.boxes.padding.top})`)
             .attr('id', config.map.boxes.id)
@@ -421,7 +424,7 @@ export class Scene {
             w_isolated: (svg.node().clientWidth - config.map.boxes.padding.left - config.map.boxes.padding.right) / (column * 3),
             h_isolated: (svg.node().clientHeight - config.map.boxes.padding.top - config.map.boxes.padding.bottom) / (row * 5),
             // height: (svg.node().clientHeight - config.map.boxes.padding.top - config.map.boxes.padding.bottom - (svg.node().clientHeight - config.map.boxes.padding.top - config.map.boxes.padding.bottom) / (row + 2)) / (row - 1),
-            height: (svg.node().clientHeight - config.map.boxes.padding.top - config.map.boxes.padding.bottom) / (row > 2 ? row : 2),
+            height: (svg.node().clientHeight - config.map.boxes.padding.top - config.map.boxes.padding.bottom) / (row),
         }
 
         if (this.injects.start_isolation.value == true) {

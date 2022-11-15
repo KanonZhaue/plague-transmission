@@ -235,11 +235,14 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     // }
     const session_size = sessions[characters[0].id].length;
     // console.log("session size", session_size)
-
-
+    let sceneDomain = []
+    for(let i=0;i<=scene.length;i++){
+        sceneDomain.push(i)
+    }
+    console.log('sceneDomian',sceneDomain)
     const scale = {
         scenes: d3.scaleBand()
-            .domain([0, 1, 2, 3, 4, 5, 6])
+            .domain(sceneDomain)
             .range([conf.padding.top, conf.height - conf.padding.bottom - conf.padding.top * 2.5])
             .paddingInner(0.5)
         // .padding(0.3)
@@ -265,7 +268,13 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         "Section 4": '#30e3ca',
         "Section 5": '#fbac91',
         "Section 6": '#ffebb7',
-        "isolated area": '#1891ac',
+        "Section 7": '#1891ac',
+        "Section 8": '#87ceeb',
+        "Section 9": '#f0e68c',
+        "Section 10": '#32cd32',
+        "Section 11": '#4269e1',
+        "Section 12": '#7b68ee',
+
     }
 
     var colors_state = {
@@ -292,10 +301,11 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
 
 
-    var w = scale.ticks(1) - scale.ticks(0)
+    var w = (scale.ticks(1) - scale.ticks(0))
     // for (let i = t; i < ed_t && i < ((t + session_size) < ed_t ? (t + session_size) : ed_t); ++i) {
     //绘制场景
-    var h = s_i.length == 1 ? (conf.height - conf.padding.bottom) : (scale.scenes(1) - scale.scenes(0))
+    var h =(conf.height - conf.padding.bottom)/(sceneDomain.length-1)
+
     var op = 0.4
     console.log(ticks)
     console.log(loc_num)
@@ -303,7 +313,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     console.log(tmp_char)
     for (let j = 0; j < ticks.length; j++) {
         let i = ticks[j]
-        var h = s_i.length == 1 ? (conf.height - conf.padding.bottom) : (scale.scenes(1) - scale.scenes(0))
+        var h =(conf.height - conf.padding.bottom)/(sceneDomain.length-1)
         var w = (scale.ticks(1) - scale.ticks(0)) / 2
         // var lt = scale.scenes(1)
         for (let zji = 0; zji < scene.length; zji++) {
@@ -311,7 +321,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             if (loc_num[i][scene[zji]].length > 0) {
                 svg.append('rect')
                     .attr("x", conf.padding.left + w * 2 * (j))
-                    .attr("y", scale.scenes(zji))
+                    .attr("y", zji*h)
                     .attr("width", w)
                     .attr("height", h)
                     .attr('stroke-width', 0.2)
@@ -512,9 +522,9 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             return 0;
         })
         .attr("y", (d, i) => {
-            return scale.scenes(i) + 5
+            return i*h + 5
         })
-        .attr("width", (d, i) => i == 6 ? 70 : 45)
+        .attr("width", (d, i) => 45)
         .attr("height", h - 10)
         .attr("fill", (d, i) => {
             return colors[Object.keys(colors)[i]]
@@ -526,7 +536,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             return 0;
         })
         .attr("y", (d, i) => {
-            return scale.scenes(i) + 5 + 15
+            return i*h + 5 + 15
         })
         .attr("fill", (d, i) => {
             // return colors[d]
@@ -663,8 +673,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 // console.log(characters)
                 var pre = sessions[characters[i].id][t].loc
                 var line_data = [
-                    [scale.ticks(t) + w / 2, scale.scenes(pre) + role_padding(characters[i].id) + 2],
-                    [scale.ticks(t) + w, scale.scenes(pre) + role_padding(characters[i].id) + 2],
+                    [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) + 2+5],
+                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + 2+5],
                 ]
                 svg.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -697,8 +707,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var pre = sessions[characters[i].id][t].loc
                 var cur = sessions[characters[i].id][t + 1].loc
                 var line_data = [
-                    [scale.ticks(t) + w, scale.scenes(pre) + role_padding(characters[i].id) + 2],
-                    [scale.ticks(t + 1), scale.scenes(cur) + role_padding_second(characters[i].id) + 2],
+                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + 2+5],
+                    [scale.ticks(t + 1), h*(cur) + role_padding_second(characters[i].id) + 2+5],
                 ]
                 svg.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -731,8 +741,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var pre = sessions[characters[i].id][t + 1].loc
                 var cur = sessions[characters[i].id][t + 1].loc
                 var line_data = [
-                    [scale.ticks(t + 1), scale.scenes(pre) + role_padding_second(characters[i].id) + 2],
-                    [scale.ticks(t + 1) + w / 2, scale.scenes(cur) + role_padding_second(characters[i].id) + 2],
+                    [scale.ticks(t + 1), h*(pre) + role_padding_second(characters[i].id) + 2+5],
+                    [scale.ticks(t + 1) + w / 2, h*(cur) + role_padding_second(characters[i].id) + 2+5],
                 ]
                 svg.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -764,15 +774,15 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             for (let i = 0; i < characters.length; i++) {
                 var pre = sessions[characters[i].id][t].loc
                 var line_data = [
-                    [scale.ticks(t) + w / 2, scale.scenes(pre) + role_padding(characters[i].id) + 2],
-                    [scale.ticks(t) + w, scale.scenes(pre) + role_padding(characters[i].id) + 2],
+                    [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) + 2+5],
+                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + 2+5],
                 ]
                 svg.append('g')
                     .append("circle")
                     .attr("cx", (d) => {
                         return scale.ticks(t) + w / 2
                     })
-                    .attr("cy", scale.scenes(pre) + role_padding(characters[i].id) + 2)
+                    .attr("cy", h*(pre) + role_padding(characters[i].id) + 2+5)
                     .attr("r", (d, j) => {
                         return 2
                     })
