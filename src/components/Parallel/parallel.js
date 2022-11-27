@@ -28,7 +28,7 @@ function display(_ini) {
     let ini = getIni(_ini);
     let { nodes, _rec } = ini.scene.storyline((ini.ticks - 1) * ini.days)
     console.log(nodes,_rec)
-console.log(ini);
+    console.log(ini);
 
     // console.log(nodes, _rec)
     //change
@@ -58,7 +58,9 @@ console.log(ini);
     for (let i = 0; i <= ini.addScene; i++) {
         tmp_loc[ini.scenes[i]] = i
         loc_num_org[ini.scenes[i]] = []
-        scene.push(ini.scenes[i])
+        for(let j=0;j<ini.scenes.length;j++){
+            scene.push(ini.scenes[j])
+        }
     }
     console.log(loc_num_org)
     console.log(tmp_loc)
@@ -124,7 +126,8 @@ console.log(ini);
 
     let sessions = {}, loc_num = {}
     console.log(ticks)
-    console.log(ini.scenes.length)
+    console.log(ini.scenes)
+    console.log(ini.scenes.length,"ini.scenesss")
 
     // zjaRectDatas = []
     for (let k in tmp_char) {
@@ -179,8 +182,8 @@ console.log(ini);
             name: k,
             id: tmp_char[k].id
         })
-
-    for (let k in tmp_loc)
+console.log(characters)
+    for (let k in tmp_loc)88888888
         locations.push({
             name: k,
             id: tmp_loc[k]
@@ -197,14 +200,12 @@ console.log(ini);
     if (tmp_text.length == 1 && tmp_text[0] == '0')
         _isdraw = 0//只有一个人感染，则不画storyline
 
-
+console.log(story_data)
     parallel_draw(story_data, loc_num, force_role, ticks, tmp_char, _isdraw, scene)
 }
 
-
-
 function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scene) {
-    console.log(scene)
+    console.log("sceneaaa",scene)
     console.log(loc_num)
     const svg = d3.select("#parallel-svg").html("")
 
@@ -542,14 +543,17 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             // return colors[d]
         })
         .attr("font-size", 9)
-
+        
     if (_isdraw) { // 仅一人感染时会报错
-        let scene_scale_cell = conf.height
+        var scene_scale_cell = conf.height
+        console.log(scene_scale_cell)
         if (locations.length > 1) {
             scene_scale_cell = scale.scenes(locations[0].id) - scale.scenes(locations[1].id)
             scene_scale_cell = Math.abs(scene_scale_cell)
         }
         // console.log(characters)
+        console.log(locations)
+        console.log(scene_scale_cell)
 
 
         let line = d3.line()
@@ -580,9 +584,15 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             }
         }
         //场景内 线的位置关系
+        console.log("ajack",characters)
+        console.log("ajack",characters.map(d => {
+            console.log(d)
+            return d.id
+        }))
+        console.log(scene_scale_cell)
         let role_padding = d3.scaleBand()
             .domain(characters.map(d => {
-                // console.log(d)
+                console.log(d)
                 return d.id
             }))
             .range([0, scene_scale_cell])
@@ -669,13 +679,16 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
 
             //左侧 感染后在场景内
+            console.log("character",characters)
             for (let i = 0; i < characters.length; i++) {
                 // console.log(characters)
                 var pre = sessions[characters[i].id][t].loc
+                console.log(characters[i].id,role_padding(characters[i].id))
                 var line_data = [
                     [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) + 2+5],
                     [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + 2+5],
                 ]
+                console.log(line_data)
                 svg.append('g')
                     .attr("class", () => "line" + characters[i].name)
                     .append("path")

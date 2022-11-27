@@ -345,7 +345,7 @@ export class Scene {
 
 
         // 画矩形边框
-        // console.log(row, "row")
+        // console.log(column, "row")
         this.DrawRect()
     }
 
@@ -408,6 +408,7 @@ export class Scene {
         // var column
         // var row = Math.ceil(this.nodes.length / column)
 var [column,row] = BoxDesigner[ini.scenes.length-1]
+console.log(ini.scenes)
         let box = svg.append('g')
             .attr('transform', `translate(${config.map.boxes.padding.left},${config.map.boxes.padding.top})`)
             .attr('id', config.map.boxes.id)
@@ -631,9 +632,9 @@ var [column,row] = BoxDesigner[ini.scenes.length-1]
             }
         }
     }
-
+    //加载初始数据
     loadDefault = () => {
-        // console.log(conf)
+        console.log(conf,'jkjn kjnjknkj')
         this.injects = injects()
         this.conf = conf
         var nodes = conf.nodes
@@ -657,9 +658,9 @@ var [column,row] = BoxDesigner[ini.scenes.length-1]
             if (nodes[i].size == undefined) {
                 nodes[i].size = _default.size
             }
-            // this.injects.scenes.value.push(nodes[i].name)
+            this.injects.scenes.value.push(nodes[i].name)
         }
-        this.injects.scenes.value.push(nodes[0].name)
+        // this.injects.scenes.value.push(nodes[0].name)
 
         // console.log(nodes)
 
@@ -1161,11 +1162,11 @@ var [column,row] = BoxDesigner[ini.scenes.length-1]
             if (state.state == 'susceptible') continue
             let from = state.from
             if (_rec[from.id] == undefined) {
-                // console.log(from)
+                console.log(from)
                 nodes.push({
                     id: from.id,
                     role: from,
-                    infected: from.state[341].infected,
+                    infected: from.state[310].infected,
                     from: from.state[t].from.id,
                     state: from.state[t].state,
                     scene: r.state[state.infected].scene,
@@ -1177,7 +1178,7 @@ var [column,row] = BoxDesigner[ini.scenes.length-1]
                 nodes.push({
                     id: r.id,
                     role: r,
-                    infected: r.state[341].infected,
+                    infected: r.state[310].infected,
                     from: state.from.id,
                     state: state.state,
                     scene: r.state[state.infected].scene,
@@ -1748,6 +1749,7 @@ var [column,row] = BoxDesigner[ini.scenes.length-1]
 
     generateRoles = (n = 1000) => {
         this.roles = []
+        console.log(this,"AAAAAAAAAAAAAAAAAA")
         var I_0 = this.injects.I.value
         console.log(this)
         for (let i = 0; i < n; i++) {

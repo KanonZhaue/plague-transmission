@@ -1,11 +1,11 @@
 var ini = {
     radar_args_changed: {},
     scene: '',
-    ticks: 24,
+    ticks: 11,
     currentTick: 0,
     currentDay: 0,
     // tickClock: [0, 6, 8, 11, 12, 13, 15, 17, 18, 19, 21, 24], // tickClock[currentTick]/24
-    tickClock: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // tickClock[currentTick]/24
+    tickClock: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // tickClock[currentTick]/24
     days: 31,
     SEIR_data: {},
     iniChanged: 0,
@@ -70,7 +70,9 @@ var ini = {
     scenes: [],
     newScene: "",
     addScene: 0,
-    Start: 0
+    Start: 0,
+    SceneType :['Rest Area','Administrative Area','Working Area','Catering Area','Entertainment Area'],
+    SceneTypeNum:[1,1,1,1,1],//SceneType表示五个类型的场景，SceneTypeNum就是对应类型场景的个数
 }
 
 ini.S = ini.N - ini.E - ini.I - ini.R - ini.ISO

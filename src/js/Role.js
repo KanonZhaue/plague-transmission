@@ -44,30 +44,36 @@ export class Role {
      */
     init = (args) => {
         var { roles, scenes, conf, links, isInfectious, Scene } = args
+        console.log(scenes)
         this.SceneImp = Scene
         var done = true
-
+        console.log(scenes)
         if (isInfectious) {
             this.state = [{ state: 'infectious', from: this.id, done }]
         }
         else {
             this.state = [{ state: 'susceptible', done }]
         }
-
+        console.log(scenes)
         this.scenes = scenes
         this.conf = conf
         var ticks = Scene.injects.ticks.value
         this.tick = (ticks - 1) * Scene.injects.days.value
         this.roles = roles
         // this.links = links
+        console.log(scenes)
         var mapOfScenes = {}
         for (let i = 0; i < scenes.length; i++) {
             mapOfScenes[scenes[i].name] = scenes[i]
+            console.log(scenes[i])
         }
         this.mapOfScenes = mapOfScenes
         // console.log(this, mapOfScenes, scenes)
         // 生成 tick 坐标数据
         var abab = parseInt(Math.random() * scenes.length)
+        // console.log(mapOfScenes,scenes[abab].name)
+        // console.log(mapOfScenes[scenes[abab].name])
+        // console.log(this.landing(0, mapOfScenes[scenes[abab].name]))
         var data = [this.landing(0, mapOfScenes[scenes[abab].name])] // 出生点都在第一个场景内
 
         this.stateTime = scenes[abab].avgTime;
@@ -104,7 +110,7 @@ export class Role {
                 if (next.name == "")
                     next.name = currentScene
                 // console.log(next)
-                // console.log(mapOfScenes[next.name])
+                
                 data.push(this.landing(i, mapOfScenes[next.name]))
                 this.stateTime = scenes[next.k].avgTime;
             } else {

@@ -1,9 +1,9 @@
 import { injects } from "../../js/injects"
 import conf from "../../conf/cls8"
-
 class newScene {
-    constructor(name, size, dist, popul, avgtime) {
-        this.name = name;
+    constructor(type,index, size, dist, popul, avgtime) {
+        this.type = type;
+        this.index = index;
         this.size = { x: size.x, y: size.y };
         this.distance = dist;
         this.popularity = popul;
@@ -16,6 +16,8 @@ let scenes = []
 export default function setup() {
     var ini = injects();
     var Name = null,
+        SceneType = "Rest Area",
+        index = 0,
         size = { x: 0, y: 0 },
         dist = 0,
         popul = 0,
@@ -24,11 +26,19 @@ export default function setup() {
     return {
         DialogYes() {
             document.getElementById("Tooltip").style.display = "none";
-            var scene = new newScene(Name, size, dist, popul, avgtime);
+            console.log(SceneType)
+            console.log(ini)
+            console.log(ini['SceneTypeNum'])
+            console.log(ini['SceneType']['value']);
+            console.log(SceneType)
+            index = ini['SceneTypeNum'][ini['SceneType']['value'].indexOf(SceneType)]
+            var scene = new newScene(SceneType,index, size, dist, popul, avgtime);
             // scenes.push(scene)
             ini["addScene"].value += 1
             ini["newScene"].value = scene
-            // console.log(ini)
+            ini['SceneTypeNum'][ini['SceneType']['value'].indexOf(SceneType)]+=1
+            // ini['SceneTypeNum'].value[]
+            console.log("adddd",ini)
             let node = conf.nodes
             console.log('node1',node)
             window.reDrawSceneRects()
@@ -70,6 +80,11 @@ export default function setup() {
         inputName(key) {
             Name = key
             // console.log(Name)
+        },
+        inputType(event){
+            console.log(event)
+            SceneType = event.target.value;
+             //获取option对应的value值 select_class_id是后台约定的提交数据的名称
         },
         Size_x(key) {
             size.x = key;

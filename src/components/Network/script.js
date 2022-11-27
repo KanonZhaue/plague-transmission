@@ -211,7 +211,7 @@ function init(ini, recover) {
     }
     // console.log(root.descendants(), root.links())
 
-
+    console.log(root.descendants())
     g.nodes.selectAll('circle')
         .data(root.descendants())
         .join('circle')
@@ -222,7 +222,7 @@ function init(ini, recover) {
         .attr("stroke-width", d => d.data.id == ini.force_role ? 6 : 1)
         .attr('class', 'hover-stroke')
         .attr('id', d => struct_id.node(d.data))
-        .attr("fill", d => d.data.id == 0 ? '#000' : d.data.role.state[d.data.role.state[713].infected].scene.color)
+        .attr("fill", d => d.data.id == 0 ? '#000' : d.data.role.state[d.data.role.state[310].infected].scene.color)
         //     // .attr("r", d=>scale.r( maxDepth(d) - d.depth ))
         .attr('r', node_r)
         .on('click', e => {
@@ -745,7 +745,7 @@ function special_display(nodes, links, ini) {
         .attr("stroke-width", d => d.data.id == ini.force_role.value ? 6 : 1)
         .attr('class', 'hover-stroke')
         .attr('id', d => struct_id.node(d.data))
-        .attr("fill", d => d.data.id == 0 ? '#000' : d.data.role.state[d.data.role.state[713].infected].scene.color)
+        .attr("fill", d => d.data.id == 0 ? '#000' : d.data.role.state[d.data.role.state[310].infected].scene.color)
         //     // .attr("r", d=>scale.r( maxDepth(d) - d.depth ))
         .attr('r', node_r)
         .on('click', e => {

@@ -20,25 +20,35 @@ var _ = {
     // links,
     "nodes": [
         {
-            name: "1",
+            name: "Rest Area",
             size: { x: 200, y: 190 },
+            type: ini.SceneType[0],
+            typeIndex :0,
         },
-        // {
-        //     name: "2",
-        //     size: { x: 200, y: 300 },
-        // },
-        // {
-        //     name: "3",
-        //     size: { x: 190, y: 410 },
-        // },
-        // {
-        //     name: "4",
-        //     size: { x: 200, y: 230 },
-        // },
-        // {
-        //     name: "5",
-        //     size: { x: 500, y: 250 },
-        // },
+        {
+            name: "Administrative Area",
+            size: { x: 200, y: 300 },
+            type: ini.SceneType[1],
+            typeIndex :0,
+        },
+        {
+            name: "Working Area",
+            size: { x: 190, y: 410 },
+            type: ini.SceneType[2],
+            typeIndex :0,
+        },
+        {
+            name: "Catering Area",
+            size: { x: 200, y: 230 },
+            type: ini.SceneType[3],
+            typeIndex :0,
+        },
+        {
+            name: "Entertainment Area",
+            size: { x: 500, y: 250 },
+            type: ini.SceneType[4],
+            typeIndex :0,
+        },
         // {
         //     name: "6",
         //     size: { x: 250, y: 250 },
@@ -55,10 +65,8 @@ var _ = {
     //     {"name":"游泳馆"}
     // ]
     ,
-    "avgtime": [3],
-    //  3, 2, 3, 2, 1],
-    "popularity": [0.5],
-    // 0.3, 0.4, 0.86, 0.2, 0.75],
+    "avgtime": [3, 3, 2, 3, 2],
+    "popularity": [0.5, 0.3, 0.4, 0.86, 0.2],
     "default": {
         size: {
             x: 120, y: 200

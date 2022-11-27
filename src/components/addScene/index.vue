@@ -24,8 +24,16 @@
   </div> -->
 
   <div class="elem"> 
-      <p>Name: </p>
-      <n-input  type="text" size="small" style="width:200px;margin: 4px;" @input="inputName"/>
+      <!-- <p>Name: </p>
+      <n-input  type="text" size="small" style="width:200px;margin: 4px;" @input="inputName"/> -->
+      <p>Type: </p>
+      <select name="city" id="city" @change="inputType($event)">
+        <option value="Rest Area">Rest Area</option>
+        <option value="Administrative Area">Administrative Area</option>
+        <option value="Working Area">Working Area</option>
+        <option value="Catering Area">Catering Area</option>
+        <option value="Entertainment Area">Entertainment Area</option>
+      </select>
   </div>
   <div class="elem"> 
       <p>Size: </p>

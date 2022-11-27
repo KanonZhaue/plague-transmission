@@ -83,9 +83,8 @@
     <div class="flex-col-item" style=" flex-direction: row; display:flex;">
       <div class="subtitle">Scene Config ({{ seleted_scene }})</div>
       <div>
-        <n-button size="tiny" @click="AddDialog">
-      AddScene
-    </n-button>
+        <n-button size="tiny" @click="AddDialog">AddScene</n-button>
+        <n-button size="tiny" @click="AddDialog">DeleteScene</n-button>
     </div>
     </div>
 
