@@ -246,8 +246,11 @@
     <Tips />
 
     <!-- 提示框 tooltip -->
-    <div id="Tooltip">
+    <div id="TooltipAddScene">
      <AddScene></AddScene>
+    </div>
+    <div id="TooltipDelScene">
+     <DelScene></DelScene>
     </div>
   </n-message-provider>
 </template>

@@ -48,5 +48,8 @@ export default function setup() {
         console.log(ini["newScene"])
         scene.AddScene(ini["newScene"].value)
     })
+    watch(inject("delScene"), () => {
+        scene.DelScene(ini["DelSceneIndex"].value)
+    })
     return { ini }
 }

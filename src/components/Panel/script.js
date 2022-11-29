@@ -55,7 +55,10 @@ export default function setup() {
             ini.start_action.value = dt2t(ini.currentDay.value, ini.currentTick.value)
         },
         AddDialog() {
-            document.getElementById("Tooltip").style.display = "block";
+            document.getElementById("TooltipAddScene").style.display = "block";
+        },
+        DelDialog() {
+            document.getElementById("TooltipDelScene").style.display = "block";
         },
     }
 }

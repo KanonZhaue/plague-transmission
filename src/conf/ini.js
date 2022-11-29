@@ -70,9 +70,12 @@ var ini = {
     scenes: [],
     newScene: "",
     addScene: 0,
+    delScene:0,
+    DelSceneIndex:0,
     Start: 0,
     SceneType :['Rest Area','Administrative Area','Working Area','Catering Area','Entertainment Area'],
     SceneTypeNum:[1,1,1,1,1],//SceneType表示五个类型的场景，SceneTypeNum就是对应类型场景的个数
+
 }
 
 ini.S = ini.N - ini.E - ini.I - ini.R - ini.ISO

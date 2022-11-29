@@ -390,7 +390,24 @@ export class Scene {
         this.updateStateOfRoles()
         this.drawByTick(dt2t(ini.currentDay, ini.currentTick), ini.distanceLine)
     }
-
+    //删除参数中的index位场景
+    DelScene = (SceneIndex) => {
+        var nodes = this.nodes
+        nodes.splice(SceneIndex,1)
+        console.log("nodes",nodes,SceneIndex)
+        this.injects.scenes.value.slice(SceneIndex,1)
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].color = colorsTable[i]
+        }
+        // nodes = nodes.reverse()
+    
+        this.nodes = nodes
+        // this.links = links
+        this.DrawRect()
+        this.generateRoles(ini.N)
+        this.updateStateOfRoles()
+        this.drawByTick(dt2t(ini.currentDay, ini.currentTick), ini.distanceLine)
+    }
 
     //问题：1加隔离区后场景大小记得改
     //问题：2新区域

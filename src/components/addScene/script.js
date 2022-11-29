@@ -1,8 +1,9 @@
 import { injects } from "../../js/injects"
 import conf from "../../conf/cls8"
 class newScene {
-    constructor(type,index, size, dist, popul, avgtime) {
+    constructor(type,name,index, size, dist, popul, avgtime) {
         this.type = type;
+        this.name = name;
         this.index = index;
         this.size = { x: size.x, y: size.y };
         this.distance = dist;
@@ -25,26 +26,20 @@ export default function setup() {
 
     return {
         DialogYes() {
-            document.getElementById("Tooltip").style.display = "none";
-            console.log(SceneType)
-            console.log(ini)
-            console.log(ini['SceneTypeNum'])
-            console.log(ini['SceneType']['value']);
-            console.log(SceneType)
-            index = ini['SceneTypeNum'][ini['SceneType']['value'].indexOf(SceneType)]
-            var scene = new newScene(SceneType,index, size, dist, popul, avgtime);
+            document.getElementById("TooltipAddScene").style.display = "none";
+            index = ini['SceneTypeNum']['value'][ini['SceneType']['value'].indexOf(SceneType)]
+            Name = SceneType+" "+index
+            var scene = new newScene(SceneType,Name,index, size, dist, popul, avgtime);
             // scenes.push(scene)
             ini["addScene"].value += 1
             ini["newScene"].value = scene
             ini['SceneTypeNum'][ini['SceneType']['value'].indexOf(SceneType)]+=1
-            // ini['SceneTypeNum'].value[]
-            console.log("adddd",ini)
             let node = conf.nodes
             console.log('node1',node)
             window.reDrawSceneRects()
         },
         DialogNO() {
-            document.getElementById("Tooltip").style.display = "none";
+            document.getElementById("TooltipAddScene").style.display = "none";
         },
         options: [
             {
@@ -77,14 +72,13 @@ export default function setup() {
             }
         ],
 
-        inputName(key) {
-            Name = key
-            // console.log(Name)
-        },
+        // inputName(key) {
+        //     Name = key
+        //     // console.log(Name)
+        // },
         inputType(event){
             console.log(event)
             SceneType = event.target.value;
-             //获取option对应的value值 select_class_id是后台约定的提交数据的名称
         },
         Size_x(key) {
             size.x = key;

@@ -13,6 +13,7 @@ import SpreadTree from "../SpreadTree"
 import Player from "../Player"
 import SEIR from "../SEIR"
 import AddScene from "../addScene/index.vue"
+import DelScene from "../deleteScene/index.vue"
 import Parallel from "../Parallel"
 
 import Netbox from "../netbox"
@@ -25,7 +26,7 @@ import { injects } from "../../js/injects";
 var ini;
 
 export default {
-  components: { card, Panel, Map, Network, Ana, Tips, River, Clock, Trace, SpreadTree, Player, SEIR, Netbox, Sunburst, Parallel, AddScene },
+  components: { card, Panel, Map, Network, Ana, Tips, River, Clock, Trace, SpreadTree, Player, SEIR, Netbox, Sunburst, Parallel, AddScene,DelScene},
   setup() {
     ini = injects()
     var distanceLine = inject('distanceLine')
