@@ -43,9 +43,9 @@
         let ini = injects()
         
         var selectSceneData1=[]
-        console.log(ini['scenes']['_rawValue'])
-        for(let i=0;i<ini['scenes']['_rawValue'].length;i++){
-            selectSceneData1.push({'index':i,"value":ini['scenes'].value[i]})
+        console.log(ini['SceneType'].value)
+        for(let i=0;i<ini['SceneType'].value.length;i++){
+            selectSceneData1.push({'index':i,"value":ini['SceneType'].value[i]})
         }
         console.log("bta",selectSceneData1)
         return {

@@ -395,7 +395,7 @@ export class Scene {
         var nodes = this.nodes
         nodes.splice(SceneIndex,1)
         console.log("nodes",nodes,SceneIndex)
-        this.injects.scenes.value.slice(SceneIndex,1)
+        this.injects.scenes.value.splice(SceneIndex,1)
         for (let i = 0; i < nodes.length; i++) {
             nodes[i].color = colorsTable[i]
         }

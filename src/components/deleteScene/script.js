@@ -16,7 +16,16 @@ export default function setup() {
         for(let i=0;i<ini['scenes']['_rawValue'].length;i++){
             selectSceneData1.push({'index':i,"value":ini['scenes'].value[i]})
         }
-        bus.emit('log', selectSceneData1)})
+        bus.emit('log', selectSceneData1)
+    })
+    watch(inject('delScene'), () => {
+        var selectSceneData1=[]
+        console.log("watchDone",ini['scenes']['_rawValue'])
+        for(let i=0;i<ini['scenes']['_rawValue'].length;i++){
+            selectSceneData1.push({'index':i,"value":ini['scenes'].value[i]})
+        }
+        bus.emit('log', selectSceneData1)
+    })
     
     return {
         DialogYes() {
