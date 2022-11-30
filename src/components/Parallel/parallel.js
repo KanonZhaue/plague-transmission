@@ -130,6 +130,8 @@ function display(_ini) {
     console.log(ini.scenes.length,"ini.scenesss")
 
     // zjaRectDatas = []
+    console.log("tmp_char",tmp_char)
+    console.log("sessions",sessions)
     for (let k in tmp_char) {
         let role = tmp_char[k].role
         // console.log(role)
@@ -183,7 +185,7 @@ function display(_ini) {
             id: tmp_char[k].id
         })
 console.log(characters)
-    for (let k in tmp_loc)88888888
+    for (let k in tmp_loc)
         locations.push({
             name: k,
             id: tmp_loc[k]
@@ -200,7 +202,7 @@ console.log(characters)
     if (tmp_text.length == 1 && tmp_text[0] == '0')
         _isdraw = 0//只有一个人感染，则不画storyline
 
-console.log(story_data)
+console.log("story_data",story_data)
     parallel_draw(story_data, loc_num, force_role, ticks, tmp_char, _isdraw, scene)
 }
 
@@ -684,6 +686,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 // console.log(characters)
                 var pre = sessions[characters[i].id][t].loc
                 console.log(characters[i].id,role_padding(characters[i].id))
+                console.log(pre,h,role_padding(characters[i].id), h*(pre) + role_padding(characters[i].id) + 2+5)
                 var line_data = [
                     [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) + 2+5],
                     [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + 2+5],
