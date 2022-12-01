@@ -56,11 +56,14 @@ function display(_ini) {
     console.log(ini.scenes)
     console.log(loc_num_org)
     for (let i = 0; i <= ini.addScene; i++) {
-        tmp_loc[ini.scenes[i]] = i
+        
         loc_num_org[ini.scenes[i]] = []
         for(let j=0;j<ini.scenes.length;j++){
             scene.push(ini.scenes[j])
         }
+    }
+    for(let i=0;i<Object.keys(ini.scenes).length;i++){
+        tmp_loc[ini.scenes[i]] = i
     }
     console.log(loc_num_org)
     console.log(tmp_loc)
@@ -185,6 +188,7 @@ function display(_ini) {
             id: tmp_char[k].id
         })
 console.log(characters)
+console.log(tmp_loc)
     for (let k in tmp_loc)
         locations.push({
             name: k,
@@ -202,7 +206,7 @@ console.log(characters)
     if (tmp_text.length == 1 && tmp_text[0] == '0')
         _isdraw = 0//只有一个人感染，则不画storyline
 
-console.log("story_data",story_data)
+    console.log("story_data",story_data)
     parallel_draw(story_data, loc_num, force_role, ticks, tmp_char, _isdraw, scene)
 }
 
@@ -239,6 +243,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     const session_size = sessions[characters[0].id].length;
     // console.log("session size", session_size)
     let sceneDomain = []
+    console.log("scenes",scene)
     for(let i=0;i<=scene.length;i++){
         sceneDomain.push(i)
     }
