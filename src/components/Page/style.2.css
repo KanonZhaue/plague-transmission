@@ -39,8 +39,10 @@
 #Parallel {
   margin-top: -84px;
   margin-left: 2px;
-  height: 280px;
-  width: 1190px;
+  height: 275px;
+  width: 1155px;
+  position:absolute;
+  left: 340px;
 }
 
 .hover-stroke:hover {
