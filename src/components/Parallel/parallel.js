@@ -96,10 +96,11 @@ function display(_ini) {
     for (let i = 0; i <= ini.addScene; i++) {
         
         loc_num_org[ini.scenes[i]] = []
-        for(let j=0;j<ini.scenes.length;j++){
+        
+    }
+    for(let j=0;j<ini.scenes.length;j++){
             scene.push(ini.scenes[j])
         }
-    }
     for(let i=0;i<Object.keys(ini.scenes).length;i++){
         tmp_loc[ini.scenes[i]] = i
     }
@@ -361,7 +362,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     //绘制场景
     var h =(conf.height - conf.padding.bottom)/(sceneDomain.length-1)
 
-    var op = 0.4
+    var op = 0.3
     console.log(ticks)
     console.log(loc_num)
     console.log(scene)
@@ -379,6 +380,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                     .attr("y", zji*h+tuliHeight)
                     .attr("width", w)
                     .attr("height", h)
+                    .attr('rx',10)
                     .attr('stroke-width', 0.2)
                     .attr("stroke", "black")
                     .attr('fill', colors[Object.keys(colors)[zji]])
@@ -581,6 +583,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
 
     // var scene = ["Section 1", "Section 2", "Section 3", "Section 4", "Section 5", "Section 6"]
+    var tuliPadding = 800/scene.length
     var tuli = scenesG.append("g")
         .selectAll("g")
         .data(scene)
@@ -589,7 +592,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     tuli.append("rect")
         .attr("x", (d, i) => {
 
-            return (i+1)*w;
+            return (i+1)*tuliPadding;
         })
         .attr("y", (d, i) => {
             return 2
@@ -604,7 +607,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         .text((d) => d)
         .attr("x", (d, i) => {
 
-            return (i+1)*w+30;
+            return (i+1)*tuliPadding+35;
         })
         .attr("y", (d, i) => {
             return 12

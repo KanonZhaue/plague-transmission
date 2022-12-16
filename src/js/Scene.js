@@ -596,56 +596,114 @@ console.log(ini.scenes)
         else {
             console.log(row, column)
             for (let i = 0; i < row; ++i) {
-                for (let j = 0; j < column && cnt < this.nodes.length; ++j) {
-                    if (cnt++ > this.nodes.length) break
-                    // 自动填充多余空间
-                    // let n_fill = cnt < this.nodes.length ? 1 : (column - j)
-                    let n_fill = 1
-                    let node = this.nodes[cnt - 1];
-                    let _x = j * box.cell.width, _y = i * box.cell.height;
-                    let boxWidth = box.cell.width * n_fill,
-                        boxHeight = box.cell.height
-
-                    box.append('rect')
-                        .attr('fill', 'none')
-                        .attr('x', _x)
-                        .attr('y', _y)
-                        .attr('width', boxWidth)
-                        .attr('height', boxHeight)
-                        .attr('stroke', '#111')
-                        .attr('stroke-width', 1)
-                    box.append('text')
-                        .text(this.nodes[cnt - 1].name)
-                        .attr('x', _x + 2)
-                        .attr('y', _y + config.map.subtitle.fontSize)
-                        .attr('font-size', config.map.subtitle.fontSize)
-                    node.range = {
-                        border: {
-                            left: {
-                                top: [_x, _y],
-                                bottom: [_x, _y + boxHeight],
+                if(i==row-1){
+                    for (let j = 0; j < column && cnt < this.nodes.length; ++j) {
+                    
+                        if (cnt++ > this.nodes.length) break
+                        let box1Width = (svg.node().clientWidth - config.map.boxes.padding.left - config.map.boxes.padding.right) /( column-(column*row-this.nodes.length))
+                        // 自动填充多余空间
+                        // let n_fill = cnt < this.nodes.length ? 1 : (column - j)
+                        let n_fill = 1
+                        let node = this.nodes[cnt - 1];
+                        let _x = j * box1Width, _y = i * box.cell.height;
+                        let boxWidth = box1Width * n_fill,
+                            boxHeight = box.cell.height
+    
+                        box.append('rect')
+                            .attr('fill', 'none')
+                            .attr('x', _x)
+                            .attr('y', _y)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('stroke', '#111')
+                            .attr('stroke-width', 1)
+                        box.append('text')
+                            .text(this.nodes[cnt - 1].name)
+                            .attr('x', _x + 2)
+                            .attr('y', _y + config.map.subtitle.fontSize)
+                            .attr('font-size', config.map.subtitle.fontSize)
+                        node.range = {
+                            border: {
+                                left: {
+                                    top: [_x, _y],
+                                    bottom: [_x, _y + boxHeight],
+                                },
+                                right: {
+                                    top: [_x + boxWidth, _y],
+                                    bottom: [_x + boxWidth, _y + boxHeight],
+                                }
                             },
-                            right: {
-                                top: [_x + boxWidth, _y],
-                                bottom: [_x + boxWidth, _y + boxHeight],
-                            }
-                        },
-                        scene: {
-                            left: {
-                                top: [0, 0],
-                                bottom: [0, node.size.y]
-                            },
-                            right: {
-                                top: [node.size.x, 0],
-                                bottom: [node.size.x, node.size.y]
+                            scene: {
+                                left: {
+                                    top: [0, 0],
+                                    bottom: [0, node.size.y]
+                                },
+                                right: {
+                                    top: [node.size.x, 0],
+                                    bottom: [node.size.x, node.size.y]
+                                }
                             }
                         }
-                    }
-                    node.t = {
-                        x: d3.scaleLinear().domain([0, node.size.x]).range([_x, _x + boxWidth - margin.left - margin.right]),
-                        y: d3.scaleLinear().domain([0, node.size.y]).range([_y, _y + boxHeight - margin.bottom * 1.5]),
+                        node.t = {
+                            x: d3.scaleLinear().domain([0, node.size.x]).range([_x, _x + boxWidth - margin.left - margin.right]),
+                            y: d3.scaleLinear().domain([0, node.size.y]).range([_y, _y + boxHeight - margin.bottom * 1.5]),
+                        }
                     }
                 }
+                else{
+                    for (let j = 0; j < column && cnt < this.nodes.length; ++j) {
+                    
+                        if (cnt++ > this.nodes.length) break
+                        // 自动填充多余空间
+                        // let n_fill = cnt < this.nodes.length ? 1 : (column - j)
+                        let n_fill = 1
+                        let node = this.nodes[cnt - 1];
+                        let _x = j * box.cell.width, _y = i * box.cell.height;
+                        let boxWidth = box.cell.width * n_fill,
+                            boxHeight = box.cell.height
+    
+                        box.append('rect')
+                            .attr('fill', 'none')
+                            .attr('x', _x)
+                            .attr('y', _y)
+                            .attr('width', boxWidth)
+                            .attr('height', boxHeight)
+                            .attr('stroke', '#111')
+                            .attr('stroke-width', 1)
+                        box.append('text')
+                            .text(this.nodes[cnt - 1].name)
+                            .attr('x', _x + 2)
+                            .attr('y', _y + config.map.subtitle.fontSize)
+                            .attr('font-size', config.map.subtitle.fontSize)
+                        node.range = {
+                            border: {
+                                left: {
+                                    top: [_x, _y],
+                                    bottom: [_x, _y + boxHeight],
+                                },
+                                right: {
+                                    top: [_x + boxWidth, _y],
+                                    bottom: [_x + boxWidth, _y + boxHeight],
+                                }
+                            },
+                            scene: {
+                                left: {
+                                    top: [0, 0],
+                                    bottom: [0, node.size.y]
+                                },
+                                right: {
+                                    top: [node.size.x, 0],
+                                    bottom: [node.size.x, node.size.y]
+                                }
+                            }
+                        }
+                        node.t = {
+                            x: d3.scaleLinear().domain([0, node.size.x]).range([_x, _x + boxWidth - margin.left - margin.right]),
+                            y: d3.scaleLinear().domain([0, node.size.y]).range([_y, _y + boxHeight - margin.bottom * 1.5]),
+                        }
+                    }
+                }
+                
             }
         }
     }
