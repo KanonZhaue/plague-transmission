@@ -1,7 +1,7 @@
 #page-container {
   display: flex;
   flex-direction: row;
-  height: 73.5vh;
+  height: 65vh;
 }
 
 #page-container .flex-item {
@@ -11,17 +11,17 @@
 }
 
 #Panel {
-  height: 47vh;
+  height: 400px;
 }
 
 /* #Map, */
 #Network {
-  height: 62.5vh;
+  height: 400px;
   margin-bottom: 3px;
 }
 
 #Map {
-  height: 62.5vh;
+  height: 400px;
   margin-bottom: 0px;
 }
 
@@ -39,7 +39,7 @@
 #Parallel {
   margin-top: -84px;
   margin-left: 2px;
-  height: 275px;
+  height: 340px;
   width: 1155px;
   position:absolute;
   left: 340px;
@@ -73,4 +73,8 @@
   display: none;
 
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#_river{
+  top:405px;
+  position:absolute
 }

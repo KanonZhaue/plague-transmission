@@ -13,7 +13,7 @@ export default {
 <style scoped>
     svg{
         width:100%;
-        height:59vh;
+        height:370px;
     }
     #network-legend{
         pointer-events: none;

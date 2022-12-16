@@ -21,6 +21,6 @@ export default {
 #river-svg {
   margin-top: 0px;
   width: 100%;
-  height: 18.8vh;
+  height: 290px;
 }
 </style>

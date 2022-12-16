@@ -37,7 +37,7 @@ var dragRectWidth = 3;
 var dragRectHeight = 26;
 //故事线最上以及最下边的坐标
 var topY = 0;
-var bottomY = 70;
+var bottomY = 80;
 //故事线最左及最右边的坐标
 var leftX = 10;
 var rightX = 1200;
@@ -264,7 +264,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
     const conf = {
         width: svg.node().clientWidth,
-        height: 170,
+        height: 220,
         miniMapHeight:miniSvg.node().clientHeight,
         padding: {
             top: 10,
@@ -1190,7 +1190,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         //     .attr("stroke-width", '2')
 
         scenesG.append('g')
-            .attr('transform','translate(0,175)')
+            .attr('transform','translate(0,215)')
             .call(xAxis1);
     }
     if (_isdraw) { // 仅一人感染时会报错,代码同上面一样，目的在于在缩放图添加一个一样的图
@@ -1214,19 +1214,19 @@ var tulimini = minMapG.append("g")
         .data(scene)
         .enter()
         .append("g")
-    tulimini.append("rect")
-        .attr("x", (d, i) => {
+    // tulimini.append("rect")
+    //     .attr("x", (d, i) => {
 
-            return 20;
-        })
-        .attr("y", (d, i) => {
-            return (i*h + 5)*k+10
-        })
-        .attr("width", (d, i) => 25)
-        .attr("height", (h - 10)*k)
-        .attr("fill", (d, i) => {
-            return colors[Object.keys(colors)[i]]
-        })
+    //         return 20;
+    //     })
+    //     .attr("y", (d, i) => {
+    //         return (i*h + 5)*k+10
+    //     })
+    //     .attr("width", (d, i) => 25)
+    //     .attr("height", (h - 10)*k)
+    //     .attr("fill", (d, i) => {
+    //         return colors[Object.keys(colors)[i]]
+    //     })
 
 
         let line = d3.line()

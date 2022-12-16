@@ -14,7 +14,7 @@
             <Panel></Panel>
           </n-card>
 
-          <n-card
+          <!-- <n-card
             size="small"
             id="SEIR"
             title="SEIR Curve"
@@ -23,7 +23,7 @@
           >
             <template #header-extra> </template>
             <SEIR />
-          </n-card>
+          </n-card> -->
         </div>
       </div>
 
