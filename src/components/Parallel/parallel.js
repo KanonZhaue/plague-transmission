@@ -10,7 +10,7 @@ var storylineView = document.getElementById('parallel-svg-mini')
 var width = 1153
 var height=56
 var i
-var tuliHeight = 20
+var tuliHeight = 30
     //记录框变化信息
     var FramTranformX = 0;
     var SvgTransformK = 4;
@@ -583,7 +583,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
 
     // var scene = ["Section 1", "Section 2", "Section 3", "Section 4", "Section 5", "Section 6"]
-    var tuliPadding = 800/scene.length
+    var tuliPadding = 900/scene.length
     var tuli = scenesG.append("g")
         .selectAll("g")
         .data(scene)
@@ -592,13 +592,13 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     tuli.append("rect")
         .attr("x", (d, i) => {
 
-            return (i+1)*tuliPadding;
+            return (i+1)*tuliPadding-35;
         })
         .attr("y", (d, i) => {
-            return 2
+            return 4
         })
         .attr("width", (d, i) => 30)
-        .attr("height", 15)
+        .attr("height", 20)
         .attr("fill", (d, i) => {
             return colors[Object.keys(colors)[i]]
         })
@@ -607,15 +607,15 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         .text((d) => d)
         .attr("x", (d, i) => {
 
-            return (i+1)*tuliPadding+35;
+            return (i+1)*tuliPadding;
         })
         .attr("y", (d, i) => {
-            return 12
+            return 18
         })
         .attr("fill", (d, i) => {
             // return colors[d]
         })
-        .attr("font-size", 9)
+        .attr("font-size", 12)
         
     if (_isdraw) { // 仅一人感染时会报错
         
@@ -753,6 +753,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
 
             //左侧 感染后在场景内
+            let textFlag = 0
             console.log("character",characters)
             for (let i = 0; i < characters.length; i++) {
                 // console.log(characters)
@@ -789,7 +790,27 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                     })
                     .attr("stroke-width", (force_role.id == characters[i].id ? 4 : 2))
                     .attr('fill', "none")
+                    var LineG = d3.select(`.line${characters[i].name}`)
+                // LineG.append("text")
+                //     .text(()=>{
+                //         return characters[i].name
+                //     })
+                //     .attr("class","storyLineId")
+                //     .attr('y',h*(pre) + role_padding(characters[i].id) +tuliHeight)
+                //     .attr('x',10)
+                
+                
+
             }
+            // if(textFlag){
+            // for (let i = 0; i < characters.length; i++) {
+            
+            //     textFlag=1
+            // }
+
+            // }
+            
+            
             //中间 移动切换场景
             for (let i = 0; i < characters.length; i++) {
                 var pre = sessions[characters[i].id][t].loc
@@ -1209,11 +1230,11 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
 var k=0.30
 
-var tulimini = minMapG.append("g")
-        .selectAll("g")
-        .data(scene)
-        .enter()
-        .append("g")
+// var tulimini = minMapG.append("g")
+//         .selectAll("g")
+//         .data(scene)
+//         .enter()
+//         .append("g")
     // tulimini.append("rect")
     //     .attr("x", (d, i) => {
 
