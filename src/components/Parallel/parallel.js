@@ -45,6 +45,7 @@ var rectHeight = bottomY - topY;
 var minDistance = 100
 var lineWidth = 3;
 var xScaleCircleNum = 2;
+var textArea = 6//textarea旨在为线上的数字留空间
 function setup() {
     var ini = injects()
     watch(ini.force_role, () => display(ini), { immediate: false })
@@ -53,9 +54,9 @@ function setup() {
     // watch(ini.currentDay, () => display(ini), { immediate: false })
     // watch(ini.currentTick, () => display(ini), { immediate: false })
     // watch(ini.storyline_pattern, () => display(ini), { immediate: false })
-    onMounted(() => {
-        display(ini)
-    })
+    // onMounted(() => {
+    //     display(ini)
+    // })
 }
 
 // const session_size = 20; // 20
@@ -618,7 +619,6 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         .attr("font-size", 12)
         
     if (_isdraw) { // 仅一人感染时会报错
-        
         var scene_scale_cell = conf.height-tuliHeight
         console.log(scene_scale_cell)
         if (locations.length > 1) {
@@ -756,13 +756,14 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             let textFlag = 0
             console.log("character",characters)
             for (let i = 0; i < characters.length; i++) {
-                // console.log(characters)
+                // storyLineG.selectAll(".storyLineId").remove()
+                console.log("characters",characters)
                 var pre = sessions[characters[i].id][t].loc
                 console.log(characters[i].id,role_padding(characters[i].id))
                 console.log(pre,h,role_padding(characters[i].id), h*(pre) + role_padding(characters[i].id) + 2+5)
                 var line_data = [
                     [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) +tuliHeight],
-                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                    [scale.ticks(t) + w*3/4-textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
                 ]
                 console.log(line_data)
                 storyLineG.append('g')
@@ -790,14 +791,45 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                     })
                     .attr("stroke-width", (force_role.id == characters[i].id ? 4 : 2))
                     .attr('fill', "none")
-                    var LineG = d3.select(`.line${characters[i].name}`)
-                // LineG.append("text")
-                //     .text(()=>{
-                //         return characters[i].name
-                //     })
-                //     .attr("class","storyLineId")
-                //     .attr('y',h*(pre) + role_padding(characters[i].id) +tuliHeight)
-                //     .attr('x',10)
+
+                var LineG = d3.select(`.line${characters[i].name}`)
+                LineG.append("text")
+                    .text(()=>{
+                        console.log(i)
+                        return characters[i].name
+                    })
+                    .attr("class","storyLineId")
+                    .attr('y',h*(pre) + role_padding(characters[i].id) +tuliHeight+2)
+                    .attr('x',scale.ticks(t) + w *3/4-textArea)
+                line_data = [
+                    [scale.ticks(t) + w*3/4+textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                ] 
+                storyLineG.append('g')
+                    .attr("class", () => "line" + characters[i].name)
+                    .append("path")
+                    .attr('d', line(line_data))
+                    .attr("opacity", (d, j) => {
+                        if (t == 0)
+                            if (sessions[characters[i].id][t].state == "susceptible" && sessions[characters[i].id][t + 1].state == "exposed" || force_role.id == characters[i].id)
+                                return 1
+                            else if (characters[i].id == tmp_char[force_role.id].from)
+                                return 1
+                            else
+                                return 0.2
+                        if (t > 0)
+                            if (sessions[characters[i].id][t - 1].state == "susceptible" && sessions[characters[i].id][t].state == "exposed" || force_role.id == characters[i].id)
+                                return 1
+                            else if (sessions[characters[i].id][t].state == "susceptible" && sessions[characters[i].id][t + 1].state == "exposed" || force_role.id == characters[i].id)
+                                return 1
+                            else
+                                return 0.2
+                    })
+                    .attr('stroke', (d) => {
+                        return colors_state[sessions[characters[i].id][t].state]
+                    })
+                    .attr("stroke-width", (force_role.id == characters[i].id ? 4 : 2))
+                    .attr('fill', "none")
                 
                 
 
@@ -1499,7 +1531,6 @@ var k=0.30
 }
 function dragged(event) {
         minDistance = 100
-        console.log(event,this)
         {
             if ((this.id == "leftLine" || this.id == "leftDragRect") && rightLineX - event.x >= minDistance
                 && event.x >= leftBoundary && event.x < Math.max(rightBoundary, rightX)) {
@@ -1710,7 +1741,6 @@ function dragged(event) {
 
         SvgTransformK = ((width) / centerRectWidth)
         computeY()
-console.log(SvgTransformK)
         storyLineG
             .attr("transform", "translate(" + [- leftLineX * SvgTransformK * scale,0] + ") scale(" + (SvgTransformK) + ",1)")
         FramTranformX = - leftLineX * SvgTransformK * scale;

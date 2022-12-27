@@ -725,6 +725,7 @@ console.log(ini.scenes)
 
         // nodes = nodes.reverse()
         for (let i = 0; i < nodes.length; i++) {
+            console.log("nodeeeeeee",nodes)
             nodes[i].id = nodes[i].name
             nodes[i].type = 'scene'
             nodes[i].color = colorsTable[i]
@@ -1237,7 +1238,7 @@ console.log(ini.scenes)
             if (state.state == 'susceptible') continue
             let from = state.from
             if (_rec[from.id] == undefined) {
-                console.log(from)
+                // console.log(from)
                 nodes.push({
                     id: from.id,
                     role: from,

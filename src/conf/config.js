@@ -2,6 +2,7 @@ var d3 = require('d3')
 
 
 export default {
+    publicPath: './',
     radar: {
         baseline: {
             color: '#ccc'

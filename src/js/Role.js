@@ -5,6 +5,13 @@ import { link_realName2alias } from "../conf/cls8"
 import config from "../conf/config"
 import { inject } from "vue"
 import { dt2t, t2dt, mDistance, last } from "./kit"
+
+d3.csv("./场景流通率222.csv")
+.then(function(csvdata){
+    console.log("csvdata",csvdata)
+})
+
+
 export class Role {
     id = 0
     scenes = []
@@ -44,28 +51,23 @@ export class Role {
      */
     init = (args) => {
         var { roles, scenes, conf, links, isInfectious, Scene } = args
-        console.log(scenes)
         this.SceneImp = Scene
         var done = true
-        console.log(scenes)
         if (isInfectious) {
             this.state = [{ state: 'infectious', from: this.id, done }]
         }
         else {
             this.state = [{ state: 'susceptible', done }]
         }
-        console.log(scenes)
         this.scenes = scenes
         this.conf = conf
         var ticks = Scene.injects.ticks.value
         this.tick = (ticks - 1) * Scene.injects.days.value
         this.roles = roles
         // this.links = links
-        console.log(scenes)
         var mapOfScenes = {}
         for (let i = 0; i < scenes.length; i++) {
             mapOfScenes[scenes[i].name] = scenes[i]
-            console.log(scenes[i])
         }
         this.mapOfScenes = mapOfScenes
         // console.log(this, mapOfScenes, scenes)
@@ -77,6 +79,7 @@ export class Role {
         var data = [this.landing(0, mapOfScenes[scenes[abab].name])] // 出生点都在第一个场景内
 
         this.stateTime = scenes[abab].avgTime;
+        
         for (let i = 0; i <= this.tick; i++) {
             let T_state = this.stateTime;
             var p = this.P()
