@@ -7,7 +7,7 @@ import { dt2t, last, t2dt } from '../../js/kit'
 
 var d3 = require('d3');
 var storylineView = document.getElementById('parallel-svg-mini')
-var width = 1153
+var width = 1180
 var height=56
 var i
 var tuliHeight = 30
@@ -368,6 +368,13 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     console.log(loc_num)
     console.log(scene)
     console.log(tmp_char)
+    let linesLeft = scale.ticks(0) + w / 2-20
+    let linesRight = scale.ticks(ticks.length-1) + w / 2+20
+    console.log(linesLeft,linesRight)
+    // minMapG.attr("transform",`scaleX(${width/(linesRight-linesLeft)})`)
+    let minmapGG = document.getElementById("minMapG")
+    minmapGG.style.transform = `scaleX(${width/(linesRight-linesLeft)}) translateX(${linesLeft*(linesRight-linesLeft)/width})`
+    // miniSvg.attr("transform",)
     for (let j = 0; j < ticks.length; j++) {
         let i = ticks[j]
         var h =(conf.height - conf.padding.bottom-tuliHeight)/(sceneDomain.length-1)
@@ -619,6 +626,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         .attr("font-size", 12)
         
     if (_isdraw) { // 仅一人感染时会报错
+        
         var scene_scale_cell = conf.height-tuliHeight
         console.log(scene_scale_cell)
         if (locations.length > 1) {
@@ -1260,26 +1268,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         console.log(locations)
         console.log(scene_scale_cell)
 
-var k=0.30
-
-// var tulimini = minMapG.append("g")
-//         .selectAll("g")
-//         .data(scene)
-//         .enter()
-//         .append("g")
-    // tulimini.append("rect")
-    //     .attr("x", (d, i) => {
-
-    //         return 20;
-    //     })
-    //     .attr("y", (d, i) => {
-    //         return (i*h + 5)*k+10
-    //     })
-    //     .attr("width", (d, i) => 25)
-    //     .attr("height", (h - 10)*k)
-    //     .attr("fill", (d, i) => {
-    //         return colors[Object.keys(colors)[i]]
-    //     })
+        var k=0.30
 
 
         let line = d3.line()
@@ -1763,7 +1752,7 @@ function dragged(event) {
         recommandY = ((height - rectHeight * SvgTransformK) / 2 - topY * SvgTransformK)
     }
     const svg = d3.select("#parallel-svg")
-    
+    const miniSvg = d3.select("#parallel-svg-mini")
     var xScaleG = svg.append("g")
     function adjustAxes() {
 

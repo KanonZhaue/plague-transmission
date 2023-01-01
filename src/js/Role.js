@@ -3,13 +3,10 @@ var d3 = require('d3')
 import { circleRandom, rectRandom } from "./random"
 import { link_realName2alias } from "../conf/cls8"
 import config from "../conf/config"
+import scenePopularity from "./scenePopularity"
 import { inject } from "vue"
 import { dt2t, t2dt, mDistance, last } from "./kit"
 
-d3.csv("./场景流通率222.csv")
-.then(function(csvdata){
-    console.log("csvdata",csvdata)
-})
 
 
 export class Role {
@@ -50,6 +47,7 @@ export class Role {
      * @param {{scenes:Array,roles:Array}} args
      */
     init = (args) => {
+        console.log("asdfg",scenePopularity.popularityData)
         var { roles, scenes, conf, links, isInfectious, Scene } = args
         this.SceneImp = Scene
         var done = true

@@ -40,11 +40,18 @@
   margin-top: -84px;
   margin-left: 2px;
   height: 335px;
-  width: 1155px;
+  width: 1190px;
   position:absolute;
   left: 340px;
   top:490px
 }
+#minMapG{
+  position: absolute;
+  display: inline-block
+}
+
+
+
 
 .hover-stroke:hover {
   stroke: #111;
