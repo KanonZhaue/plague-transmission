@@ -301,13 +301,13 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         scenes: d3.scaleBand()
             .domain(sceneDomain)
             .range([conf.padding.top, conf.height - conf.padding.bottom - conf.padding.top * 2.5])
-            .paddingInner(0.5)
+            .paddingInner(1)
         // .padding(0.3)
         ,
         ticks: d3.scaleBand()
             .domain(d3.range(ticks.length))
             .range([conf.padding.left, conf.width - conf.padding.right - conf.padding.left])
-            .paddingInner(0.5)
+            .paddingInner(1)
             .paddingOuter(0),
     }
 
@@ -352,7 +352,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     var time_ticks = d3.scaleBand()
         .domain(Time)
         .range([conf.padding.left, conf.width - conf.padding.right - conf.padding.left])
-        .paddingInner(0.5)
+        .paddingInner(1)
         .paddingOuter(0)
     var xAxis1 = d3.axisTop().scale(time_ticks);
 
@@ -384,7 +384,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             console.log(loc_num[i][scene[zji]])
             if (loc_num[i][scene[zji]].length > 0) {
                 storyLineG.append('rect')
-                    .attr("x", conf.padding.left + w * 2 * (j))
+                    .attr("x", conf.padding.left + w * 2 * (j)-w/2)
                     .attr("y", zji*h+tuliHeight)
                     .attr("width", w)
                     .attr("height", h)
@@ -770,8 +770,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 console.log(characters[i].id,role_padding(characters[i].id))
                 console.log(pre,h,role_padding(characters[i].id), h*(pre) + role_padding(characters[i].id) + 2+5)
                 var line_data = [
-                    [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) +tuliHeight],
-                    [scale.ticks(t) + w*3/4-textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                    [scale.ticks(t), h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                    [scale.ticks(t) + w*1/4-textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
                 ]
                 console.log(line_data)
                 storyLineG.append('g')
@@ -808,10 +808,10 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                     })
                     .attr("class","storyLineId")
                     .attr('y',h*(pre) + role_padding(characters[i].id) +tuliHeight+2)
-                    .attr('x',scale.ticks(t) + w *3/4-textArea)
+                    .attr('x',scale.ticks(t) + w *1/4-textArea)
                 line_data = [
-                    [scale.ticks(t) + w*3/4+textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
-                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                    [scale.ticks(t) + w*1/4+textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
+                    [scale.ticks(t) + w/2, h*(pre) + role_padding(characters[i].id) +tuliHeight],
                 ] 
                 storyLineG.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -856,8 +856,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var pre = sessions[characters[i].id][t].loc
                 var cur = sessions[characters[i].id][t + 1].loc
                 var line_data = [
-                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + tuliHeight],
-                    [scale.ticks(t + 1), h*(cur) + role_padding_second(characters[i].id) +tuliHeight],
+                    [scale.ticks(t) + +w/2, h*(pre) + role_padding(characters[i].id) + tuliHeight],
+                    [scale.ticks(t + 1)-w/2, h*(cur) + role_padding_second(characters[i].id) +tuliHeight],
                 ]
                 storyLineG.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -890,8 +890,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var pre = sessions[characters[i].id][t + 1].loc
                 var cur = sessions[characters[i].id][t + 1].loc
                 var line_data = [
-                    [scale.ticks(t + 1), h*(pre) + role_padding_second(characters[i].id) + tuliHeight],
-                    [scale.ticks(t + 1) + w / 2, h*(cur) + role_padding_second(characters[i].id) + tuliHeight],
+                    [scale.ticks(t + 1)-w/2, h*(pre) + role_padding_second(characters[i].id) + tuliHeight],
+                    [scale.ticks(t + 1), h*(cur) + role_padding_second(characters[i].id) + tuliHeight],
                 ]
                 storyLineG.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -923,13 +923,13 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             for (let i = 0; i < characters.length; i++) {
                 var pre = sessions[characters[i].id][t].loc
                 var line_data = [
-                    [scale.ticks(t) + w / 2, h*(pre) + role_padding(characters[i].id) + tuliHeight],
-                    [scale.ticks(t) + w, h*(pre) + role_padding(characters[i].id) + tuliHeight],
+                    [scale.ticks(t), h*(pre) + role_padding(characters[i].id) + tuliHeight],
+                    [scale.ticks(t) + w/2, h*(pre) + role_padding(characters[i].id) + tuliHeight],
                 ]
                 storyLineG.append('g')
                     .append("circle")
                     .attr("cx", (d) => {
-                        return scale.ticks(t) + w / 2
+                        return scale.ticks(t)
                     })
                     .attr("cy", h*(pre) + role_padding(characters[i].id) +tuliHeight)
                     .attr("r", (d, j) => {
@@ -1373,8 +1373,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 console.log(characters[i].id,role_padding(characters[i].id))
                 console.log(pre,h,role_padding(characters[i].id), h*(pre) + role_padding(characters[i].id) + 2+5)
                 var line_data = [
-                    [scale.ticks(t) + w / 2, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
-                    [scale.ticks(t) + w, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t), (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t) + w/2, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
                 ]
                 console.log(line_data)
                 minMapG.append('g')
@@ -1408,8 +1408,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var pre = sessions[characters[i].id][t].loc
                 var cur = sessions[characters[i].id][t + 1].loc
                 var line_data = [
-                    [scale.ticks(t) + w, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
-                    [scale.ticks(t + 1), (h*(cur) + role_padding_second(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t) + w/2, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t + 1)-w/2, (h*(cur) + role_padding_second(characters[i].id) + 2+5)*k+10],
                 ]
                 minMapG.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -1442,8 +1442,8 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var pre = sessions[characters[i].id][t + 1].loc
                 var cur = sessions[characters[i].id][t + 1].loc
                 var line_data = [
-                    [scale.ticks(t + 1), (h*(pre) + role_padding_second(characters[i].id) + 2+5)*k+10],
-                    [scale.ticks(t + 1) + w / 2, (h*(cur) + role_padding_second(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t + 1)-w/2, (h*(pre) + role_padding_second(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t + 1), (h*(cur) + role_padding_second(characters[i].id) + 2+5)*k+10],
                 ]
                 minMapG.append('g')
                     .attr("class", () => "line" + characters[i].name)
@@ -1475,13 +1475,13 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             for (let i = 0; i < characters.length; i++) {
                 var pre = sessions[characters[i].id][t].loc
                 var line_data = [
-                    [scale.ticks(t) + w / 2, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
-                    [scale.ticks(t) + w, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t), (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
+                    [scale.ticks(t) + w/2, (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10],
                 ]
                 minMapG.append('g')
                     .append("circle")
                     .attr("cx", (d) => {
-                        return scale.ticks(t) + w / 2
+                        return scale.ticks(t)
                     })
                     .attr("cy", (h*(pre) + role_padding(characters[i].id) + 2+5)*k+10)
                     .attr("r", (d, j) => {

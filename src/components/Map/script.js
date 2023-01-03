@@ -29,7 +29,7 @@ export default function setup() {
         if (n < o) d3.select('#' + config.map.nodes.id).html('')
         scene.generateRoles(N.value)
         scene.updateStateOfRoles()
-        updateMap()
+        updateMap()        
     }, { immediate: false })
     watch(currentTick, () => { updateMap(scene) }, { immediate: false })
     watch(distanceLine, () => { updateMap(scene) }, { immediate: false })
