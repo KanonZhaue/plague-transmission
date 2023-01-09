@@ -47,7 +47,6 @@ export class Role {
      * @param {{scenes:Array,roles:Array}} args
      */
     init = (args) => {
-        console.log("asdfg",scenePopularity.popularityData)
         var { roles, scenes, conf, links, isInfectious, Scene } = args
         this.SceneImp = Scene
         var done = true

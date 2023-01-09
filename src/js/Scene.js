@@ -390,6 +390,7 @@ export class Scene {
         this.updateStateOfRoles()
         this.drawByTick(dt2t(ini.currentDay, ini.currentTick), ini.distanceLine)
     }
+
     //删除参数中的index位场景
     DelScene = (SceneIndex) => {
         var nodes = this.nodes
@@ -404,6 +405,12 @@ export class Scene {
         this.nodes = nodes
         // this.links = links
         this.DrawRect()
+        this.generateRoles(ini.N)
+        this.updateStateOfRoles()
+        this.drawByTick(dt2t(ini.currentDay, ini.currentTick), ini.distanceLine)
+    }
+    //reDrawScene面向的是当手动更改N的时候更新故事线图的修改
+    reDrawScene=()=>{
         this.generateRoles(ini.N)
         this.updateStateOfRoles()
         this.drawByTick(dt2t(ini.currentDay, ini.currentTick), ini.distanceLine)

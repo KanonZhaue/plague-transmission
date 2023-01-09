@@ -36,7 +36,7 @@ export default function setup() {
             ini['SceneTypeNum'][ini['SceneType']['value'].indexOf(SceneType)]+=1
             let node = conf.nodes
             console.log('node1',node)
-            window.reDrawSceneRects()
+            window.reDrawSceneRects()//z重画ui界面的几个场景名
         },
         DialogNO() {
             document.getElementById("TooltipAddScene").style.display = "none";

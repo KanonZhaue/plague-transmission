@@ -29,6 +29,7 @@ function update(ini) {
         Math.min((ini.ticks - 1) * ini.days, currentTick + river_range)
     ]
     var SCENE = ini.scene
+    console.log(SCENE)
     var d = SCENE.riverData()
     for (let k in d) {
         d[k] = d[k].slice(range[0], range[1])

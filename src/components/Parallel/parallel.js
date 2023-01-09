@@ -51,6 +51,7 @@ function setup() {
     watch(ini.force_role, () => display(ini), { immediate: false })
     watch(ini.stateupdated, () => display(ini), { immediate: false })
     watch(inject('stateUpdated'), () => display(ini), { immediate: false })
+    watch(inject('N'),() => display(ini), { immediate: false })
     // watch(ini.currentDay, () => display(ini), { immediate: false })
     // watch(ini.currentTick, () => display(ini), { immediate: false })
     // watch(ini.storyline_pattern, () => display(ini), { immediate: false })
