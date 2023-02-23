@@ -124,8 +124,9 @@ function init(ini, recover) {
     let force_role = recover ? 0 : ini.force_role
     // console.log(force_role)
     final_data = ini.scene.network((ini.ticks - 1) * ini.days)
+    console.log(final_data)
     let { nodes, links } = final_data
-    // console.log(nodes, links, 'link')
+    console.log(nodes, links, 'link')
     viewbox.width = 1519
     // 0, 0, 1519.5116669142799, 1909.8972490065576
     viewbox.height = 1909
@@ -148,9 +149,9 @@ function init(ini, recover) {
             nodes[i].y += e.dy
         }
         d3.select('#spread-nodes')
-            .selectAll('circle')
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y)
+            .selectAll('rect')
+            .attr('x', d => d.x)
+            .attr('y', d => d.y)
         d3.select('#spread-links')
             .selectAll('path')
             .attr('d', d3.linkHorizontal()
@@ -193,14 +194,38 @@ function init(ini, recover) {
         r: d3.scaleLinear().domain([0, _ini.tree_max_depth.value]).range([5, 12])
     }
     final_data.root = root;
+    let countAllDepthChilds = []
+    for(let i=0;i<nodes[nodes.length-1].depth;i++){
+
+    }
     // 极坐标->笛卡尔
     (function () {
         let nodes = root.descendants()
+        console.log(nodes)
+        let countDepth = 0
+        let lastDepth = 0
+        let depthCounts = -1
+        let lastParent
+        let depthMax = nodes[nodes.length-1].depth
+        console.log(depthMax)
         for (let i = 0; i < nodes.length; i++) {
-            let x = Math.cos(nodes[i].x) * nodes[i].y
-            let y = Math.sin(nodes[i].x) * nodes[i].y
-            nodes[i].x = x + 1 * conf.width + viewbox.x
-            nodes[i].y = y + 1.5 * conf.height + viewbox.y
+            // let x = Math.cos(nodes[i].x) * nodes[i].y
+            // let y = Math.sin(nodes[i].x) * nodes[i].y
+            
+            let x = 2400*nodes[i].depth/(depthMax)
+            if(nodes[i].depth!=lastDepth){//检测到depth发生变化
+                countDepth = 0
+                depthCounts=-1
+            }
+            if(nodes[i].parent!=lastParent){
+                lastParent = nodes[i].parent
+                depthCounts++
+            }
+            let y = countDepth*20 + 10*depthCounts
+            nodes[i].x = x + viewbox.x-1.2*conf.width
+            nodes[i].y = -y +4.7*  conf.height + viewbox.y
+            countDepth++
+            lastDepth = nodes[i].depth
         }
     })()
     let g = {
@@ -212,11 +237,13 @@ function init(ini, recover) {
     // console.log(root.descendants(), root.links())
 
     console.log(root.descendants())
-    g.nodes.selectAll('circle')
+    g.nodes.selectAll('rect')
         .data(root.descendants())
-        .join('circle')
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y)
+        .join('rect')
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
+        .attr('width','20px')
+        .attr('height','20px')
         .attr("stroke", "#111")
         .attr("stroke-opacity", 0.7)
         .attr("stroke-width", d => d.data.id == ini.force_role ? 6 : 1)
@@ -224,29 +251,55 @@ function init(ini, recover) {
         .attr('id', d => struct_id.node(d.data))
         .attr("fill", d => d.data.id == 0 ? '#000' : d.data.role.state[d.data.role.state[310].infected].scene.color)
         //     // .attr("r", d=>scale.r( maxDepth(d) - d.depth ))
-        .attr('r', node_r)
+        // .attr('r', node_r)
         .on('click', e => {
-            // console.log(e)
-            _ini.force_role.value = e.path[0].__data__.data.id
+            console.log(e)
+            console.log(e.target['__data__']['data']['id'])
+            _ini.force_role.value = e.target['__data__']['data']['id']
 
         })
         .append('title')
         .text(d => d.data.id);
-    // console.log(root.links(), 'look')
-    g.links.selectAll('path')
-        .data(root.links())
-        .join('path')
-        .attr("stroke", "#555")
-        .attr("stroke-opacity", 0.4)
-        .attr("stroke-width", 1.5)
-        .attr("fill", "none")
-        .attr('id', d => struct_id.link({
-            source: d.source.data,
-            target: d.target.data
-        }))
-        .attr('d', d3.linkHorizontal()
-            .x(d => d.x)
-            .y(d => d.y))
+    console.log(root.links(), 'look')
+    nodes = root.descendants()
+    let lastParent
+    for(let i=2;i<nodes.length;i++){
+        console.log(root.links()[i])
+        console.log(nodes[i].parent,lastParent)
+        if(nodes[i].parent!=lastParent){
+            
+            lastParent = nodes[i].parent
+            console.log(i)
+            console.log(root.links()[i])
+            g.links.append('path')
+            .data([root.links()[i-2]])
+            .attr("stroke", "#555")
+            .attr("stroke-opacity", 0.4)
+            .attr("stroke-width", 1.5)
+            .attr("fill", "none")
+            .attr('id', d => struct_id.link({
+                source: d.source.data,
+                target: d.target.data
+            }))
+            .attr('d', d3.linkHorizontal()
+                .x(d => d.x)
+                .y(d => d.y))
+        }
+        
+    }
+    g.links.append('path')
+            .data([root.links()[root.links().length-1]])
+            .attr("stroke", "#555")
+            .attr("stroke-opacity", 0.4)
+            .attr("stroke-width", 1.5)
+            .attr("fill", "none")
+            .attr('id', d => struct_id.link({
+                source: d.source.data,
+                target: d.target.data
+            }))
+            .attr('d', d3.linkHorizontal()
+                .x(d => d.x)
+                .y(d => d.y))
 
     return // 不要legend
     let legend_conf = {
@@ -517,7 +570,7 @@ function force_map(ini, recover) {
         .attr("stroke-opacity", 0.7)
         .attr("stroke-width", d => d.data.id == ini.force_role ? 6 : 1)
         .on('click', e => {
-            // console.log(e)
+            console.log(e)
             _ini.force_role.value = e.path[0].__data__.data.id
 
         })
@@ -735,11 +788,13 @@ function special_display(nodes, links, ini) {
     // }
     // d3.select('#network-svg').attr('viewBox', `0, 0, ${viewbox.width}, ${viewbox.height}`)
     // console.log(nodes)
-    g.nodes.selectAll('circle')
+    g.nodes.selectAll('rect')
         .data(nodes)
-        .join('circle')
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y)
+        .join('rect')
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
+        .attr('width','20px')
+        .attr('height','20px')
         .attr("stroke", "#111")
         .attr("stroke-opacity", 0.7)
         .attr("stroke-width", d => d.data.id == ini.force_role.value ? 6 : 1)
@@ -747,8 +802,9 @@ function special_display(nodes, links, ini) {
         .attr('id', d => struct_id.node(d.data))
         .attr("fill", d => d.data.id == 0 ? '#000' : d.data.role.state[d.data.role.state[310].infected].scene.color)
         //     // .attr("r", d=>scale.r( maxDepth(d) - d.depth ))
-        .attr('r', node_r)
+        // .attr('r', node_r)
         .on('click', e => {
+            console.log(e)
             console.log(e.path[0].__data__.data.id)
             ini.force_role.value = e.path[0].__data__.data.id
         })
