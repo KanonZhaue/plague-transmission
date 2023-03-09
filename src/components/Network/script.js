@@ -240,7 +240,12 @@ function init(ini, recover) {
     g.nodes.selectAll('rect')
         .data(root.descendants())
         .join('rect')
-        .attr('x', d => d.x)
+        .attr('x', (d)=>{
+            if(d.x==null){
+                return 1
+            }
+            return d.x
+        })
         .attr('y', d => d.y)
         .attr('width','20px')
         .attr('height','20px')
@@ -264,13 +269,13 @@ function init(ini, recover) {
     nodes = root.descendants()
     let lastParent
     for(let i=2;i<nodes.length;i++){
-        console.log(root.links()[i])
-        console.log(nodes[i].parent,lastParent)
+        // console.log(root.links()[i])
+        // console.log(nodes[i].parent,lastParent)
         if(nodes[i].parent!=lastParent){
             
             lastParent = nodes[i].parent
-            console.log(i)
-            console.log(root.links()[i])
+            // console.log(i)
+            // console.log(root.links()[i])
             g.links.append('path')
             .data([root.links()[i-2]])
             .attr("stroke", "#555")

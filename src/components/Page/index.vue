@@ -14,16 +14,7 @@
             <Panel></Panel>
           </n-card>
 
-          <!-- <n-card
-            size="small"
-            id="SEIR"
-            title="SEIR Curve"
-            content-style="padding:0"
-            :header-style="header_style_small"
-          >
-            <template #header-extra> </template>
-            <SEIR />
-          </n-card> -->
+          
         </div>
       </div>
 
@@ -144,12 +135,28 @@
 
 
     <div style="flex-direction: row;  display: flex;">
-    <div id="_river" style="width: 341px">
+      <div id="SEIRMap">
+        <n-card
+            size="small"
+            id="SEIR"
+            title="SEIR Curve"
+            content-style="padding:0"
+            :header-style="header_style_small"
+            onclick="document.getElementById('_river').style.visibility='visible';
+                 document.getElementById('SEIRMap').style.visibility='hidden';"
+          >
+            <template #header-extra> </template>
+            <SEIR />
+        </n-card>
+      </div>
+    <div id="_river">
       <n-card
         title="River"
         content-style="padding:0"
         size="small"
         :header-style="header_style"
+        onclick="document.getElementById('_river').style.visibility='hidden';
+                 document.getElementById('SEIRMap').style.visibility='visible';"
       >
         <template #header-extra>
           <n-space align="center">

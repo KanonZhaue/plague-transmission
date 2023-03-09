@@ -35,9 +35,24 @@ export default function setup() {
     watch(distanceLine, () => { updateMap(scene) }, { immediate: false })
     watch(currentDay, () => { updateMap(scene) }, { immediate: false })
     watch(inject('iniChanged'), () => {
-        console.log(ini)
+        console.log("inia",ini)
         ini.isolation_tick.value = dt2t(ini.currentDay.value, ini.currentTick.value)
+        ini.args.value['default'] = {
+            beta: ini.beta,          // 传染概率β
+            rho: ini.rho,           // 有效接触系数ρ
+            delta: ini.delta,         // 感染者转换为隔离者的概率
+            lambda: ini.lambda,        // λ是隔离解除速率
+            theta: ini.theta,         // θ是潜伏者（E）相对于感染者传播能力的比值
+            sigma: ini.sigma,         // σ为潜伏者（E）向感染者（I）的转化速率
+            d: ini.d,             // 感染者的影响距离(社交距离)
+            I_gamma: ini.I_gamma,       // I的恢复系数γ
+            ISO_gamma: ini.ISO_gamma,     // 隔离者的恢复率
+            close_distance: ini.close_distance // 密切接触距离
+        }
+        scene.generateRoles(N.value)
+
         scene.updateStateOfRoles()
+        // scene.CountR0()
         updateMap(scene)
     }, { immediate: false })
     watch(inject("start_isolation"), () => {

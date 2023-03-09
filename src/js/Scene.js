@@ -415,6 +415,38 @@ export class Scene {
         this.updateStateOfRoles()
         this.drawByTick(dt2t(ini.currentDay, ini.currentTick), ini.distanceLine)
     }
+    //新添要求，完成R0计算
+    CountR0=()=>{
+        let args = { ...this.injects.args.value }
+        console.log("argssss",this.injects)
+        for (let k in args) {
+            args[k] = { ...args[k] }
+            for (let _ in args[k]) {
+                if (args[k][_] == undefined)
+                    args[k][_] = args['default'][_]
+            }
+        }
+        var rs = this.roles
+        console.log(rs)
+        let neighbourTotal = 0,RolesTickCount=1
+        var { I, days, ticks, rehabilitation, incubation } = this.injectsValues()
+        ticks = dt2t(days - 1, ticks - 1)
+        for(let i=0;i<rs.length;i++){
+            for(let t=0;t<ticks;t++){
+                // console.log(rs[i].origin_state)
+                // console.log(rs[i].origin_state[t])
+                // console.log(rs[i].origin_state[t].state)
+                if(rs[i].origin_state[t].state == "infectious"||rs[i].origin_state[t].state == "exposed"){
+                    RolesTickCount++;
+                    var neig = rs[i].filterByDistance(t, args[rs[i].where(t, true).name].d, true)
+                    neighbourTotal+=neig.length;
+                }
+            }
+        }
+        console.log("R00",neighbourTotal/RolesTickCount*11*this.injects.beta.value)
+    }
+
+
 
     //问题：1加隔离区后场景大小记得改
     //问题：2新区域
@@ -431,8 +463,8 @@ export class Scene {
         var { column } = this.layout
         // var column
         // var row = Math.ceil(this.nodes.length / column)
-var [column,row] = BoxDesigner[ini.scenes.length-1]
-console.log(ini.scenes)
+        var [column,row] = BoxDesigner[ini.scenes.length-1]
+        console.log(ini.scenes)
         let box = svg.append('g')
             .attr('transform', `translate(${config.map.boxes.padding.left},${config.map.boxes.padding.top})`)
             .attr('id', config.map.boxes.id)
@@ -799,6 +831,16 @@ console.log(ini.scenes)
         incubation *= ticksLength
         rehabilitation *= ticksLength
         ticks = dt2t(days - 1, ticks - 1)
+        let args = { ...this.injects.args.value }
+        console.log("argssss",this.injects)
+        for (let k in args) {
+            args[k] = { ...args[k] }
+            for (let _ in args[k]) {
+                if (args[k][_] == undefined)
+                    args[k][_] = args['default'][_]
+            }
+        }
+        let neighbourTotal = 0,RolesTickCount=0
         for (let t = 0; t <= ticks; t++) {
             if (t == 0)  // 初始化
             {
@@ -830,15 +872,10 @@ console.log(ini.scenes)
                         rs[i].origin_state.push(_state)
                 }
             }
-            let args = { ...this.injects.args.value }
-            for (let k in args) {
-                args[k] = { ...args[k] }
-                for (let _ in args[k]) {
-                    if (args[k][_] == undefined)
-                        args[k][_] = args['default'][_]
-                }
-            }
+            
+            // console.log("RS",rs[0].origin_state[2].state)
             for (let i = 0; i < rs.length; i++) {
+                //rs  roles 所有的人物role集合
                 var aim = rs[i]
                 // if(aim.coordination)
                 var aim_last = last(aim.origin_state)
@@ -865,8 +902,11 @@ console.log(ini.scenes)
                     }
                     // S -> E
                     var neig = aim.filterByDistance(t, d, true)
-                    // console.log("neig", neig.length)
+                    // console.log(neig)
+                    
+                    RolesTickCount++;
                     for (let j = 0; j < neig.length; j++) {
+                        neighbourTotal++;
                         var target = neig[j]
                         var target_last = last(target.origin_state)
                         if (target_last.done || target_last.state != 'susceptible') continue
@@ -883,6 +923,43 @@ console.log(ini.scenes)
             }
         }
         // this.injects.stateUpdated.value++
+        
+        // for(let t = 0;t<=ticks;t++){
+        
+        //     for(let i=0;i<rs.length;i++){
+        //         console.log(rs[i])
+        //         // for(let k = 0;k<rs[i].tick-11;k++){
+                    
+        //             //这个方法通过循环每个role，得到他们在S变为E，I状态后以每一天，11tick为范围，求这11tick期间他们接触的人总数，通过总数*β==R0莱反推β范围
+        //             // let l,neighbourTotalTemp=0;
+        //             // for(l=t;l<11+t;l++){
+        //                 // console.log(t,i,l)
+        //                 if(rs[i].origin_state[t].state=="infectious"||rs[i].origin_state[t].state=="exposed"){
+
+        //                     // console.log(rs[i].filterByDistance(t, args[rs[i].where(t).name].d,true))
+        //                 }
+        //                 else{
+        //                     break;
+        //                 }
+        //             // }
+        //             // if(l==11+t){
+        //             //     neighbourDays++;
+        //             //     neighbourTotal+=neighbourTotalTemp;
+        //             //     if(neighbourMax<neighbourTotal)neighbourMax=neighbourTotal;
+        //             //     if(neighbourMin>neighbourTotal)neighbourMin=neighbourTotal;
+        //             // }
+        //         // }
+        //     }
+            
+        // }
+        // console.log(neighbourMax)
+        // console.log(neighbourMin)
+        // console.log(neighbourTotal)
+        // console.log(RolesTickCount)
+        // console.log("R0",neighbourTotal/RolesTickCount*11)
+        this.CountR0()
+
+
     }
 
     updateStateOfRoles = () => {
@@ -958,13 +1035,13 @@ console.log(ini.scenes)
                         args[k][_] = args['default'][_]
                 }
             }
-
             for (let i = 0; i < rs.length; i++) {
                 var aim = rs[i]
                 // if(aim.coordination)
                 var aim_last = last(aim.state)
                 if (aim_last.state == 'infectious' || aim_last.state == 'exposed') {
                     let { beta, theta, d, sigma, I_gamma, delta } = args[aim.where(t).name]
+                    console.log("beta",beta)
                     let E_beta = beta * theta
                     // I -> R
                     var aimP = Math.random()
@@ -999,6 +1076,7 @@ console.log(ini.scenes)
                     }
                     // S -> E
                     var neig = aim.filterByDistance(t, d)
+                    console.log("neig1",neig)
                     for (let j = 0; j < neig.length; j++) {
                         var target = neig[j]
                         var target_last = last(target.state)

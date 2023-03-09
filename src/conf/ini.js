@@ -17,7 +17,7 @@ var ini = {
     // isolation_tick: null,        // update code is in Map.script.js
     incubation: 5,            // 潜伏期
     rehabilitation: 1,        // 康复延迟（天）
-    N: 1200,                  // 角色数量
+    N: 2000,                  // 角色数量
     temp_N: 2000,
     // I_beta_x1:0.5,        // x1 社交距离的接触的传染概率-感染者
     // I_beta_x2:0.2,        // x2 社交距离的传染概率-感染者
@@ -32,7 +32,7 @@ var ini = {
     med: 0.4,
     sigma: 0.06,            // σ为潜伏者（E）向感染者（I）的转化速率
     dist: 4.0,
-    d: 1.5, //1.5                  // 感染者的影响距离(社交距离)
+    d: 2, //1.5                  // 感染者的影响距离(社交距离)
     I_gamma: 0.013,            // I的恢复系数γ
     ISO_gamma: 0,             // 隔离者的恢复率
     // I_r:10,               // 感染者平均每天接触的人数

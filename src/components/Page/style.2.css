@@ -83,5 +83,13 @@
 }
 #_river{
   top:405px;
-  position:absolute
+  width: 330px;
+  position:absolute;
+  visibility: visible;
+}
+#SEIRMap{
+  width: 340px;
+  top:405px;
+  position:absolute;
+  visibility: hidden;
 }

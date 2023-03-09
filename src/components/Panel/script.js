@@ -40,6 +40,7 @@ export default function setup() {
         ini.radar_args_changed.value['delta'] = 1
     })
     watch(inject('beta'), () => {
+        console.log("betaaaaaaaaaaaa")
         ini.radar_args_changed.value['beta'] = 1
     })
     watch(inject("addScene"), () => {

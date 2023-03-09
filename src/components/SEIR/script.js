@@ -8,7 +8,6 @@ var d3 = require('d3')
 
 export function drawSEIRByReality(_ini) {
     let ini = getIni(_ini)
-    console.log(ini.d, 'ini')
     let start_isolation = ini.start_isolation
     let isolation_tick = ini.isolation_tick
     let _t = 1 / ini.ticks
@@ -429,6 +428,10 @@ export function setup() {
         // watch(inject(''),()=>{
         //     // drawSEIR(ini)
         // },{immediate:false})
+        watch(ini.iniChanged,()=>{
+            console.log(ini)
+            drawSEIRByReality(ini)
+        },{immediate:false})
         watch(inject('stateUpdated'), () => {
             // drawSEIRByComputed(ini)
             drawSEIRByReality(ini)

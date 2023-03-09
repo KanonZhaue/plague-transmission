@@ -169,13 +169,13 @@ function display(_ini) {
      *****************/
 
     let sessions = {}, loc_num = {}
-    console.log(ticks)
-    console.log(ini.scenes)
-    console.log(ini.scenes.length,"ini.scenesss")
+    // console.log(ticks)
+    // console.log(ini.scenes)
+    // console.log(ini.scenes.length,"ini.scenesss")
 
     // zjaRectDatas = []
-    console.log("tmp_char",tmp_char)
-    console.log("sessions",sessions)
+    // console.log("tmp_char",tmp_char)
+    // console.log("sessions",sessions)
     for (let k in tmp_char) {
         let role = tmp_char[k].role
         // console.log(role)
@@ -187,22 +187,22 @@ function display(_ini) {
             if (loc_num[i] == undefined) {
                 loc_num[i] = {}
                 for(let zjai=0;zjai<ini.scenes.length;zjai++){
-                    console.log(Object.values(ini.scenes));
+                    // console.log(Object.values(ini.scenes));
                     loc_num[i][Object.values(ini.scenes)[zjai]] = []
                 }
                 
             }
-            console.log(loc_num)
+            // console.log(loc_num)
 
             
             //scene就是场景，role.coordination就是人物的场景/坐标
-            console.log(scene, role.coordination, i)
+            // console.log(scene, role.coordination, i)
             let loc = scene.name
             //loc是所选场景的id
             if (tmp_loc[loc] === undefined) tmp_loc[loc] = loc
             // console.log(role.state[i], role.state[ticks[j - 1]])
             if ((j != 0 && role.state[i].state == 'exposed' && role.state[ticks[j - 1]].state == 'susceptible')) {//j!=0表示不是第一时刻，tick[j]时为exposed,tick[j-1]时为susceptible认为在这一时刻被感染
-                console.log(role)
+                // console.log(role)
                 loc_num[i][loc].push(tmp_char[k].id)
                 // tempRectData = {}
                 // tempRectData['startTick'] = role.state[role.tick].infected
@@ -212,14 +212,14 @@ function display(_ini) {
                 // zjaRectDatas.push(tempRectData)
             }  //|| (j == 0 && role.state[i].state != 'susceptible')
 
-            console.log(loc_num)
+            // console.log(loc_num)
             session.push({
                 state: role.state[i].state,
                 loc: tmp_loc[loc]
             })
         }
     }
-    console.log(tmp_char, loc_num, sessions)
+    // console.log(tmp_char, loc_num, sessions)
 
 
     let characters = [], locations = [];
@@ -228,8 +228,8 @@ function display(_ini) {
             name: k,
             id: tmp_char[k].id
         })
-console.log(characters)
-console.log(tmp_loc)
+// console.log(characters)
+// console.log(tmp_loc)
     for (let k in tmp_loc)
         locations.push({
             name: k,
@@ -382,7 +382,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
         var w = (scale.ticks(1) - scale.ticks(0)) / 2
         // var lt = scale.scenes(1)
         for (let zji = 0; zji < scene.length; zji++) {
-            console.log(loc_num[i][scene[zji]])
+            // console.log(loc_num[i][scene[zji]])
             if (loc_num[i][scene[zji]].length > 0) {
                 storyLineG.append('rect')
                     .attr("x", conf.padding.left + w * 2 * (j)-w/2)
@@ -629,14 +629,14 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
     if (_isdraw) { // 仅一人感染时会报错
         
         var scene_scale_cell = conf.height-tuliHeight
-        console.log(scene_scale_cell)
+        // console.log(scene_scale_cell)
         if (locations.length > 1) {
             scene_scale_cell = scale.scenes(locations[0].id) - scale.scenes(locations[1].id)
             scene_scale_cell = Math.abs(scene_scale_cell)
         }
         // console.log(characters)
-        console.log(locations)
-        console.log(scene_scale_cell)
+        // console.log(locations)
+        // console.log(scene_scale_cell)
 
 
         let line = d3.line()
@@ -667,15 +667,15 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
             }
         }
         //场景内 线的位置关系
-        console.log("ajack",characters)
-        console.log("ajack",characters.map(d => {
-            console.log(d)
-            return d.id
-        }))
-        console.log(scene_scale_cell)
+        // console.log("ajack",characters)
+        // console.log("ajack",characters.map(d => {
+        //     console.log(d)
+        //     return d.id
+        // }))
+        // console.log(scene_scale_cell)
         let role_padding = d3.scaleBand()
             .domain(characters.map(d => {
-                console.log(d)
+                // console.log(d)
                 return d.id
             }))
             .range([0, scene_scale_cell])
@@ -763,18 +763,18 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
 
             //左侧 感染后在场景内
             let textFlag = 0
-            console.log("character",characters)
+            // console.log("character",characters)
             for (let i = 0; i < characters.length; i++) {
                 // storyLineG.selectAll(".storyLineId").remove()
-                console.log("characters",characters)
+                // console.log("characters",characters)
                 var pre = sessions[characters[i].id][t].loc
-                console.log(characters[i].id,role_padding(characters[i].id))
-                console.log(pre,h,role_padding(characters[i].id), h*(pre) + role_padding(characters[i].id) + 2+5)
+                // console.log(characters[i].id,role_padding(characters[i].id))
+                // console.log(pre,h,role_padding(characters[i].id), h*(pre) + role_padding(characters[i].id) + 2+5)
                 var line_data = [
                     [scale.ticks(t), h*(pre) + role_padding(characters[i].id) +tuliHeight],
                     [scale.ticks(t) + w*1/4-textArea, h*(pre) + role_padding(characters[i].id) +tuliHeight],
                 ]
-                console.log(line_data)
+                // console.log(line_data)
                 storyLineG.append('g')
                     .attr("class", () => "line" + characters[i].name)
                     .append("path")
@@ -804,7 +804,7 @@ function parallel_draw(data, loc_num, force_role, ticks, tmp_char, _isdraw, scen
                 var LineG = d3.select(`.line${characters[i].name}`)
                 LineG.append("text")
                     .text(()=>{
-                        console.log(i)
+                        // console.log(i)
                         return characters[i].name
                     })
                     .attr("class","storyLineId")
