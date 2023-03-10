@@ -64,7 +64,7 @@ export function drawSEIRByReality(_ini) {
             .attr('stroke-width', 1)
     }
     // Y
-    tick_value = d3.range(0, ini.N, (ini.N - 1) / 8).map(d => Math.round(d))
+    tick_value = d3.range(0, ini.N+0.001, (ini.N) / 8).map(d => Math.round(d))//加0.001目的就是为了让这里得出来的个数是N/8+1
     tick_ticks = tick_value.slice(0)
     tick_ticks[tick_value.length - 1] = 'N'
     axis.y.append('line')
@@ -215,7 +215,19 @@ export function drawSEIRByReality(_ini) {
     curvesGener(ECoor, config.color.exposed)
     curvesGener(ICoor, config.color.infectious)
     curvesGener(RCoor, config.color.recovered)
+    function linesDecorate(){
+        for(let i=0;i<tick_value.length;i+=2){
+            lines.append("line")
+            .attr('x1',0)
+            .attr("x2",x(ini.days))
+            .attr('y1', y(tick_value[i]))
+            .attr('y2', y(tick_value[i]))
+            .attr('stroke','rgba(190,190,190,0.5)')
+            .attr('stroke-width',"1px")
+        }
 
+    }
+    linesDecorate()
     function centerPosition(p1, p2) {
         return [
             (p1[0] + p2[0]) / 2,
