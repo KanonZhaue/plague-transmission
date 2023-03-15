@@ -39,6 +39,7 @@ export function drawSEIRByReality(_ini) {
         fontSize: 12,
     }
     var tick_value = d3.range(0, ini.days, (ini.days - 1) / 15).map(d => Math.round(d))
+    
     var tick_ticks = tick_value.slice(0)
     tick_ticks[tick_ticks.length - 1] = 'day'
     // X axis
@@ -47,21 +48,25 @@ export function drawSEIRByReality(_ini) {
         .attr('x2', x(ini.days))
         .attr('stroke', '#111')
         .attr('stroke-width', 1)
+        console.log(tick_ticks)
     for (let i = 0; i < tick_ticks.length; ++i) {
-        axis.x
+        if(i%2||i==tick_ticks.length-1){
+             axis.x
             .append('text')
             .attr('x', x(tick_value[i]))
             .attr('y', axis.fontSize + 2)
             .text(tick_ticks[i])
             .attr('style', 'text-anchor:middle;')
             .attr('font-size', axis.fontSize)
-        axis.x
+            axis.x
             .append('line')
             .attr('x1', x(tick_value[i]))
             .attr('x2', x(tick_value[i]))
             .attr('y2', 5)
             .attr('stroke', '#111')
             .attr('stroke-width', 1)
+        }
+       
     }
     // Y
     tick_value = d3.range(0, ini.N+0.001, (ini.N) / 8).map(d => Math.round(d))//加0.001目的就是为了让这里得出来的个数是N/8+1
@@ -75,19 +80,22 @@ export function drawSEIRByReality(_ini) {
         .attr('stroke', '#111')
         .attr('stroke-width', 1)
     for (let i = 0; i < tick_value.length; ++i) {
-        axis.y
-            .append('text')
-            .text(tick_ticks[i])
-            .attr('y', y(tick_value[i]) + axis.fontSize / 3)
-            .attr('x', x(0) - 5 - axis.fontSize * tick_ticks[i].toString().length / 2 - 5)
-            .attr('font-size', axis.fontSize)
-        axis.y.append('line')
-            .attr('stroke', '#111')
-            .attr('stroke-width', 1)
-            .attr('x1', x(0))
-            .attr('x2', x(0) - 5)
-            .attr('y1', y(tick_value[i]))
-            .attr('y2', y(tick_value[i]))
+        console.log(tick_value)
+        if(i%2==0||i==tick_value.length-1){
+            axis.y
+                .append('text')
+                .text(tick_ticks[i])
+                .attr('y', y(tick_value[i]) + axis.fontSize / 3)
+                .attr('x', x(0) - 5 - axis.fontSize * tick_ticks[i].toString().length / 2 - 5)
+                .attr('font-size', axis.fontSize)
+            axis.y.append('line')
+                .attr('stroke', '#111')
+                .attr('stroke-width', 1)
+                .attr('x1', x(0))
+                .attr('x2', x(0) - 5)
+                .attr('y1', y(tick_value[i]))
+                .attr('y2', y(tick_value[i]))
+        }
     }
 
     // axis.append('g')
@@ -216,6 +224,7 @@ export function drawSEIRByReality(_ini) {
     curvesGener(ICoor, config.color.infectious)
     curvesGener(RCoor, config.color.recovered)
     function linesDecorate(){
+        tick_value = d3.range(0, ini.N+0.001, (ini.N) / 8).map(d => Math.round(d))//加0.001目的就是为了让这里得出来的个数是N/8+1
         for(let i=0;i<tick_value.length;i+=2){
             lines.append("line")
             .attr('x1',0)
@@ -248,18 +257,82 @@ export function drawSEIRByReality(_ini) {
     }
 
     function drawCmpLine(data, color) {
+        console.log(data)
+        let maxYIndex = 0,maxY = 100000;
+        for(let i=0;i<data.length;i++){
+            if(data[i][1]<=maxY){
+                maxY= data[i][1];
+                maxYIndex = i;
+            }
+        }
         lines
             .append('path')
             .attr('d', CmpLineGener(data))
             .attr('stroke', color)
             .attr('stroke-width', 2)
             .attr('stroke-dasharray', '3 2')
+        
+        return maxYIndex
     }
 
     drawCmpLine(oriCoor.SCoor, config.color.susceptible)
-    drawCmpLine(oriCoor.ECoor, config.color.exposed)
-    drawCmpLine(oriCoor.ICoor, config.color.infectious)
-    drawCmpLine(oriCoor.RCoor, config.color.recovered)
+    let EMaxYIndex = drawCmpLine(oriCoor.ECoor, config.color.exposed)
+    let IMaxYIndex = drawCmpLine(oriCoor.ICoor, config.color.infectious)
+    let MaxRectWidth = 28,MaxRectHeight = 10
+    if(EMaxYIndex!=oriCoor.ECoor.length-1){
+        console.log(EMaxYIndex)
+        console.log(oriCoor.ECoor,EMaxYIndex)
+        lines.append('circle')
+            .attr("cx",oriCoor.ECoor[EMaxYIndex][0])
+            .attr("cy",oriCoor.ECoor[EMaxYIndex][1])
+            .attr("r",'3')
+            .attr('fill',config.color.exposed)
+            .attr('stroke',"white")
+            .attr("stroke-width",'1px')
+
+        lines.append("rect")
+           .attr("x",oriCoor.ECoor[EMaxYIndex][0]-MaxRectWidth/2)
+           .attr("y",oriCoor.ECoor[EMaxYIndex][1]-MaxRectHeight-5)
+           .attr("width",`${MaxRectWidth}px`)
+           .attr("height",`${MaxRectHeight}px`)
+           .attr("stroke",config.color.exposed)
+           .attr("fill",'none')
+
+        lines.append('text')
+            .attr("x",oriCoor.ECoor[EMaxYIndex][0]-MaxRectWidth/3-1)
+            .attr("y",oriCoor.ECoor[EMaxYIndex][1]-MaxRectHeight/2-1)
+            .text(Ey[EMaxYIndex])
+            .attr("font-size",'10px')
+           .attr("stroke",config.color.exposed)
+
+
+    }
+    if(IMaxYIndex!=oriCoor.ICoor.length-1){
+        console.log(IMaxYIndex)
+        console.log(oriCoor.ICoor,IMaxYIndex)
+        lines.append('circle')
+            .attr("cx",oriCoor.ICoor[IMaxYIndex][0])
+            .attr("cy",oriCoor.ICoor[IMaxYIndex][1])
+            .attr("r",'3')
+            .attr('fill',config.color.infectious)
+            .attr('stroke',"white")
+            .attr("stroke-width",'1px')
+        lines.append("rect")
+            .attr("x",oriCoor.ICoor[IMaxYIndex][0]-MaxRectWidth/2)
+            .attr("y",oriCoor.ICoor[IMaxYIndex][1]-MaxRectHeight-5)
+            .attr("width",`${MaxRectWidth}px`)
+            .attr("height",`${MaxRectHeight}px`)
+            .attr("stroke",config.color.infectious)
+            .attr("fill",'none')
+ 
+         lines.append('text')
+             .attr("x",oriCoor.ICoor[IMaxYIndex][0]-MaxRectWidth/3-1)
+             .attr("y",oriCoor.ICoor[IMaxYIndex][1]-MaxRectHeight/2-1)
+             .text(Iy[IMaxYIndex])
+             .attr("font-size",'10px')
+           .attr("stroke",config.color.infectious)
+
+    }
 
     // 隔离分割线
     if (start_isolation)
@@ -354,8 +427,45 @@ export function drawSEIRByReality(_ini) {
                     .attr('y', (d, i) => y_scale(i) + y + dataWindow.fontSize / 3 + dataWindow.margin.top)
                     .attr('font-size', dataWindow.fontSize)
                 dataWindow.shown = true
+                
+                
+            lines.append('circle')
+            .attr("class","tempCircles")
+            .attr("cx",oriCoor.SCoor[i][0])
+            .attr("cy",oriCoor.SCoor[i][1])
+            .attr("r",'3')
+            .attr('fill',config.color.susceptible)
+            .attr('stroke',"white")
+            .attr("stroke-width",'1px')
+            lines.append('circle')
+            .attr("class","tempCircles")
+            .attr("cx",oriCoor.ECoor[i][0])
+            .attr("cy",oriCoor.ECoor[i][1])
+            .attr("r",'3')
+            .attr('fill',config.color.exposed)
+            .attr('stroke',"white")
+            .attr("stroke-width",'1px')
+            lines.append('circle')
+            .attr("class","tempCircles")
+            .attr("cx",oriCoor.ICoor[i][0])
+            .attr("cy",oriCoor.ICoor[i][1])
+            .attr("r",'3')
+            .attr('fill',config.color.infectious)
+            .attr('stroke',"white")
+            .attr("stroke-width",'1px')
+            lines.append('circle')
+            .attr("class","tempCircles")
+            .attr("cx",oriCoor.RCoor[i][0])
+            .attr("cy",oriCoor.RCoor[i][1])
+            .attr("r",'3')
+            .attr('fill',config.color.recovered)
+            .attr('stroke',"white")
+            .attr("stroke-width",'1px')
+
+
             })
             .on('mouseout', () => {
+                d3.selectAll(".tempCircles").remove()
                 if (dataWindow.shown == true) {
                     dataWindow.g.html('')
                     dataWindow.shown = false

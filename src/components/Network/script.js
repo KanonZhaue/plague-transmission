@@ -241,7 +241,7 @@ function init(ini, recover) {
         .data(root.descendants())
         .join('rect')
         .attr('x', (d)=>{
-            if(d.x==null){
+            if(d.x==NaN){
                 return 1
             }
             return d.x
