@@ -17,7 +17,7 @@ var ini = {
     // isolation_tick: null,        // update code is in Map.script.js
     incubation: 5,            // 潜伏期
     rehabilitation: 1,        // 康复延迟（天）
-    N: 2000,                  // 角色数量
+    N: 800,                  // 角色数量
     temp_N: 2000,
     // I_beta_x1:0.5,        // x1 社交距离的接触的传染概率-感染者
     // I_beta_x2:0.2,        // x2 社交距离的传染概率-感染者
